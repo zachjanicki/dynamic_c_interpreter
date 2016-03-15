@@ -1,17 +1,8 @@
 // Some type checking functions...
 
-#include <iostream>
-#include <regex>
-#include <string>
-#include "token.h"
-
 using namespace std;
 
-bool isInt(Token);
-bool isFloat(Token);
-bool isOperator(Token);
-bool isVariable(Token);
-bool isKeyword(Token);
+#include "typeChecking.h"
 
 bool isInt(Token token) {
     string tokenString = token.getVal();
@@ -49,7 +40,8 @@ bool isVariable(Token token) {
     return false;
 }
 
-bool isKeyword(Token, token) {
+
+bool isKeyword(Token token) {
     string tokenString = token.getVal();
     // if tokenString is in the keyword dictionary...
 }
