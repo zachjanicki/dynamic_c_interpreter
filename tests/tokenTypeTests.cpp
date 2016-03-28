@@ -30,7 +30,13 @@ void testIsFloat(){
 
 
 void testIsOperator(){
-
+    assert(isOperator("+") == true);
+    assert(isOperator("-") == true);
+    assert(isOperator("*") == true);
+    assert(isOperator("/") == true);
+    assert(isOperator("++") == true);
+    assert(isOperator("--") == true);
+    assert(isOperator("%") == true);
 
 }
 
