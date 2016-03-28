@@ -1,7 +1,7 @@
 //
 //  Token.h
-//  
-//  
+//
+//
 //  Created by John Joyce on 3/15/16.
 //
 //
@@ -18,90 +18,97 @@ using namespace std;
 
 class Token {
     public :
-    Token(string val, string ty) {
+    Token(string val, string ty, int line, int startingPos, int endingPos) {
         value = val;
         type = ty;
+        line = line;
+        startingPos = startingPos;
+        endingPos = endingPos;
     }
-    private :
+    string getVal(){
+        return value;
+    }
+private:
     string value;
     string type;
-    
+    int line, startingPos, endingPos;
+
+
 };
 
 
 class Integer : public Token {
     public :
-    Integer(string val) {
+    Integer(string val, int line, int startingPos, int endingPos): Token(val, "Integer" ,line, startingPos, endingPos) {
         value = atoi(val.c_str());
     }
-    
-    private :
+    int getVal(){
+        return value;
+    }
+
+private:
     int value;
+
 };
 
 class Float : public Token {
     public :
-    Float(string val) {
+    Float(string val, int line, int startingPos, int endingPos): Token(val, "Float", line, startingPos, endingPos) {
         value = atof(val.c_str());
     }
-    private :
+    float getVal(){
+        return value;
+    }
+private:
     float value;
-    
+
 };
 
 class Symbol : public Token {
     public :
-    Symbol(string val) {
-        value = val;
+    Symbol(string val, int line, int startingPos, int endingPos): Token(val, "Symbol", line, startingPos, endingPos) {
     }
-    private :
-    string value;
-    
+private:
+
 };
 
 class Operator : public Token {
     public :
-    Operator(string val) {
-        value = val;
+    Operator(string val, int line, int startingPos, int endingPos): Token(val, "Operator", line, startingPos, endingPos) {
     }
-    private :
-    string value;
-    
-    
+private:
+
+
 };
 
 class Variable : public Token {
     public :
-    Variable(string val) {
-        value = val;
+    Variable(string val, int line, int startingPos, int endingPos): Token(val, "Variable", line, startingPos, endingPos) {
     }
-    private :
-    string value;
-    
+private:
+
 };
 
 class Keyword : public Token {
     public :
-    Keyword(string val) {
-        value = val;
+    Keyword(string val, int line, int startingPos, int endingPos):Token(val, "Keyword", line, startingPos, endingPos)  {
     }
-    private :
-    string value;
-    
+private:
+
 };
 
 class Function : public Token {
     public :
-    Function(string nm, vector <string> args, string def) {
+    Function(string nm, vector <string> args, string def, int line, int startingPos, int endingPos): Token(name, "Function", line, startingPos, endingPos) {
         name = nm;
         arguments = args;
         definition = def;
     }
-    private :
+private:
     string name;
     vector<string> arguments;
     string definition;
-    
+
 };
 
 

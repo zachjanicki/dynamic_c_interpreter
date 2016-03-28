@@ -3,10 +3,10 @@
 #include <iostream>
 #include <regex>
 #include <string>
-#include "token.h"
+using namespace std;
 
-bool isInt(Token);
-bool isFloat(Token);
-bool isOperator(Token);
-bool isVariable(Token);
-bool isKeyword(Token);
+bool isInt(string);
+bool isFloat(string);
+bool isOperator(string);
+bool isVariable(string);
+bool isKeyword(string);
