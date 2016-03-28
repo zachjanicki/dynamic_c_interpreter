@@ -1,4 +1,4 @@
-// Some type checking functions...
+/* Implementation of typeChecking.h */
 
 using namespace std;
 
@@ -19,9 +19,33 @@ bool isFloat(string token) {
     }
     return false;
 }
-
+/* deprecated
 bool isOperator(string token) {
     regex regularExpression("^[+-/*<>]{1}$|^(<=)$|^(>=)$|^(eq)$");
+    if (regex_match(token, regularExpression)) {
+        return true;
+    }
+    return false;
+} */
+
+bool isArithOperator(string token) {
+    regex regularExpression("^[+-/*%]{1}$|^++$|^--$|^+=$|^-=$|^*=$|^/=$");
+    if (regex_match(token, regularExpression)) {
+        return true;
+    }
+    return false;
+}
+
+bool isLogicalOperator(string token) {
+    regex regularExpression("^[<>]{1}$|^==$|^<=$|^>=$");
+    if (regex_match(token, regularExpression)) {
+        return true;
+    }
+    return false;
+}
+
+bool isAssignmentOperator(string token) {
+    regex regularExpression("^=$");
     if (regex_match(token, regularExpression)) {
         return true;
     }
@@ -39,5 +63,5 @@ bool isVariable(string token) {
 
 bool isKeyword(string token) {
     // if token is in the keyword dictionary...
-    return true;
+    return false;
 }
