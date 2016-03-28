@@ -60,6 +60,13 @@ bool isVariable(string token) {
     return false;
 }
 
+bool isSemiColon(string token) {
+    regex regularExpression("^;$");
+    if (regex_match(token, regularExpression)) {
+        return true;
+    }
+    return false;
+}
 
 bool isKeyword(string token) {
     // if token is in the keyword dictionary...
