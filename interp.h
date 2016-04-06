@@ -8,12 +8,13 @@
 
 #include <vector>
 #include "Token.h"
+#include "env.h"
 
 #ifndef INTERP_H
 #define INTERP_H
 
 
-int interp(vector <Token *>);
+int interp(vector <Token *>, env &);
 
 
 
