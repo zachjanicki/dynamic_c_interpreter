@@ -4,7 +4,6 @@
 
 
 #include "Token.h"
-#include "typeChecking.h"
 #include <vector>
 int main() {
     string js;

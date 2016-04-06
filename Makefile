@@ -1,0 +1,25 @@
+CC=		g++
+CPPFLAGS=	-Wall -o
+ObjectFlags= -c
+all: main
+
+
+main: repl.o typeChecking.o tokenize.o Token.h
+	$(CC) $(CPPFLAGS) main repl.o typeChecking.o tokenize.o 
+
+repl.o: repl.cpp Token.h
+	$(CC) $(ObjectFlags) $<
+ 
+
+typeChecking.o: typeChecking.cpp typeChecking.h 
+	$(CC) $(ObjectFlags) $<
+
+tokenize.o: tokenize.cpp 
+
+
+
+
+
+clean:
+	rm *.o 
+	rm main
