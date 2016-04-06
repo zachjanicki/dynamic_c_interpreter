@@ -29,18 +29,55 @@ void testIsFloat(){
 }
 
 
-void testIsOperator(){
-    assert(isOperator("+") == true);
-    assert(isOperator("-") == true);
-    assert(isOperator("*") == true);
-    assert(isOperator("/") == true);
-    assert(isOperator("++") == true);
-    assert(isOperator("--") == true);
-    assert(isOperator("%") == true);
+void testIsArithOperator(){
+    assert(isArithOperator("+") == true);
+    assert(isArithOperator("-") == true);
+    assert(isArithOperator("*") == true);
+    assert(isArithOperator("/") == true);
+    assert(isArithOperator("++") == true);
+    assert(isArithOperator("--") == true);
+    assert(isArithOperator("%") == true);
+    assert(isArithOperator("<") == false);
+    assert(isArithOperator(">") == false);
+    assert(isArithOperator("=") == false);
+    assert(isArithOperator("==") == false);
+    assert(isArithOperator("3") == false);
+    assert(isArithOperator("2.3") == false);
+    assert(isArithOperator("") == false);
+    assert(isArithOperator(" ") == false);
 
 }
 
+void testIsLogicalOperator(){
+    assert(isLogicalOperator("<") == true);
+    assert(isLogicalOperator(">") == true);
+    assert(isLogicalOperator(">=") == true);
+    assert(isLogicalOperator("<=") == true);
+    assert(isLogicalOperator("==") == true);
+    assert(isLogicalOperator("&&") == true);
+    assert(isLogicalOperator("||") == true);
+    assert(isLogicalOperator("!") == true);
+    assert(isLogicalOperator("!=") == true);
 
+    assert(isLogicalOperator("=") == false);
+    assert(isLogicalOperator("<<=") == false);
+    assert(isLogicalOperator(">>=") == false);
+    assert(isLogicalOperator("2.3") == false);
+    assert(isLogicalOperator("!&&") == false);
+    assert(isLogicalOperator("!<=") == false);
+
+}
+
+void testIsAssignmentOperator(){
+    assert(isAssignmentOperator("=") == true);
+    assert(isAssignmentOperator("*=") == true);
+    assert(isAssignmentOperator("+=") == true);
+    assert(isAssignmentOperator("/=") == true);
+    assert(isAssignmentOperator("-=") == true);
+    assert(isAssignmentOperator("%=") == true);
+
+
+}
 void testIsVariable(){
 
 
