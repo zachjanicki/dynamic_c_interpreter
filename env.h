@@ -43,15 +43,14 @@ class env {
         booleans["false"] = false;
         
     }
-
-
-    private:
+    
     vector <string> keywords;
     map <string, Variable> variables;
     map <string, Function> user_defined_functions;
     map <string, func> operators;
     map <string, BOOL> booleans;
-    
+
+    private:
     
     template <typename T>
     T add(T term1, T term2) {
