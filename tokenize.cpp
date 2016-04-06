@@ -39,12 +39,14 @@ vector<Token*> seperateIntoTokens(string line) {
         oldToken = NULL;
         if (line[i] != ' ') { // dealing with characters right next to each other "aabbas;, a=1, var==var2, ect..."
             characters += line[i];
-            newToken = createToken(characters);
+            int startingPos = i - characters.length();
+            int endingPos = i;
+            newToken = createToken(characters, 0, startingPos, endingPos);
 
             if (!isSameType(newToken, oldToken) && i != 0) { // then we need to add what we have onto the tokenList
-                if (!newToken.getType() != "Keyword") {
+                if (newToken->getType() != "Keyword") {
                     i--;
-                    tokenList.pushback(oldToken);
+                    tokenList.push_back(oldToken);
                     newToken = NULL;
                     oldToken = NULL;
                     characters = "";
@@ -56,7 +58,7 @@ vector<Token*> seperateIntoTokens(string line) {
 
 
         } else { //there is a space so we add what we have to the tokenList and reset the struct
-            tokenList.pushback(oldToken);
+            tokenList.push_back(oldToken);
             newToken = NULL;
             oldToken = NULL;
             characters = "";
@@ -68,25 +70,26 @@ vector<Token*> seperateIntoTokens(string line) {
 
 
 ////need a way to pass in line, startingPos, endingPos when creating token objects.
-Token* createToken(string TokenStr) {
+Token* createToken(string TokenStr, int line, int start, int end) {
 
     Token *currentToken;
-    if (isInt(current)) {
+    /*if (isInt(TokenStr)) {
         currentToken = new Integer();
-    } else if (isFloat(current)) {
-        currentToken = new Float();
-    } else if (isArithOperator(current)) {
-        currentToken = new ArithOperator();
-    } else if (isLogicalOperator(current)) {
-        currentToken = new LogicalOperator();
-    } else if (isAssignmentOperator(current)) {
-        currentToken = new AssignmentOperator();
-    } else if (isVariable(current)) {
-        currentToken = new Variable();
-    } else if (isSemiColon(current)) {
-        currentToken = new Symbol();
-    } else if (isKeyword(current)) {
-        currentToken = new Keyword();
+    }*/
+    if (isFloat(TokenStr)) {
+        currentToken = new Float(TokenStr, line, start, end);
+    } else if (isArithOperator(TokenStr)) {
+        currentToken = new ArithOperator(TokenStr, line, start, end);
+    } else if (isLogicalOperator(TokenStr)) {
+        currentToken = new LogicalOperator(TokenStr, line, start, end);
+    } else if (isAssignmentOperator(TokenStr)) {
+        currentToken = new AssignmentOperator(TokenStr, line, start, end);
+    } else if (isVariable(TokenStr)) {
+        currentToken = new Variable(TokenStr, line, start, end);
+    } else if (isSemiColon(TokenStr)) {
+        currentToken = new Symbol(TokenStr, line, start, end);
+    } else if (isKeyword(TokenStr)) {
+        currentToken = new Keyword(TokenStr, line, start, end);
     } else {
         currentToken = NULL;
     }

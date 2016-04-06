@@ -14,16 +14,17 @@
 #include <string>
 #include <cstring>
 #include <vector>
+
 using namespace std;
 
 class Token {
 public:
-    Token(string val, string ty, int line, int startingPos, int endingPos) {
+    Token(string val, string ty, int ln, int startingP, int endingP) {
         value = val;
         type = ty;
-        line = line;
-        startingPos = startingPos;
-        endingPos = endingPos;
+        line = ln;
+        startingPos = startingP;
+        endingPos = endingP;
     }
     string getVal(){
         return value;
@@ -86,23 +87,23 @@ private:
 
 class ArithOperator: public Operator {
 public:
-    ArithOperator(string val, int line, int startingPos, int endingPos): Token(val, "ArithOperator", line, startingPos, endingPos){
+    ArithOperator(string val, int line, int startingPos, int endingPos): Operator(val, "ArithOperator", line, startingPos, endingPos){
 
     }
 private:
 
 };
 
-class AssignmentOperator: public: Operator {
+class AssignmentOperator: public Operator {
 public:
-    AssignmentOperator(string val, int line, int startingPos, int endingPos): Token(val, "AssignmentOperator", line, startingPos, endingPos){
+    AssignmentOperator(string val, int line, int startingPos, int endingPos): Operator(val, "AssignmentOperator", line, startingPos, endingPos){
 
     }
 };
 
-class LogicalOperator: public: Operator {
+class LogicalOperator: public Operator {
 public:
-    LogicalOperator(string val, int line, int startingPos, int endingPos): Token(val, "LogicalOperator", line, startingPos, endingPos){
+    LogicalOperator(string val, int line, int startingPos, int endingPos): Operator(val, "LogicalOperator", line, startingPos, endingPos){
 
     }
 };
@@ -127,7 +128,7 @@ private:
 
 class Function : public Token {
 public:
-    Function(string nm, vector <string> args, string def, int line, int startingPos, int endingPos): Token(name, "Function", line, startingPos, endingPos) {
+    Function(string nm, vector <string> args, string def, int line, int startingPos, int endingPos): Token(nm, "Function", line, startingPos, endingPos) {
         name = nm;
         arguments = args;
         definition = def;

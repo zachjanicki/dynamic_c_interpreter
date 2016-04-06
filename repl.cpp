@@ -15,7 +15,7 @@ int main() {
         if (js == "exit") {
             break;
         }
-        tokens = js.tokenize() //or tokenize(js) ? depends on how we write that
+        //tokens = js.tokenize() //or tokenize(js) ? depends on how we write that
 
     }
 }
