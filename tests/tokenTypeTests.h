@@ -7,6 +7,8 @@ using namespace std;
 
 void testIsInt();
 void testIsFloat();
-void testIsOperator();
+void testIsArithOperator();
+void testIsLogicalOperator();
+void testIsAssignmentOperator();
 void testIsVariable();
 void testIsKeyword();
