@@ -15,7 +15,10 @@ typeChecking.o: typeChecking.cpp typeChecking.h
 	$(CC) $(ObjectFlags) $<
 
 tokenize.o: tokenize.cpp 
+	$(CC) $(ObjectFlags) $<
 
+interp.o: interp.cpp Token.h
+	$(CC) $(ObjectFlags) $<
 
 
 
