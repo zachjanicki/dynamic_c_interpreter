@@ -11,10 +11,14 @@ repl.o: repl.cpp Token.h
 	$(CC) $(ObjectFlags) $<
 
 
+
 typeChecking.o: typeChecking.cpp typeChecking.h
 	$(CC) $(ObjectFlags) $<
 
 tokenize.o: tokenize.cpp
+	$(CC) $(ObjectFlags) $<
+
+interp.o: interp.cpp Token.h
 	$(CC) $(ObjectFlags) $<
 
 
