@@ -5,21 +5,21 @@ all: main
 
 
 main: repl.o typeChecking.o tokenize.o Token.h
-	$(CC) $(CPPFLAGS) main repl.o typeChecking.o tokenize.o 
+	$(CC) $(CPPFLAGS) main repl.o typeChecking.o tokenize.o
 
 repl.o: repl.cpp Token.h
 	$(CC) $(ObjectFlags) $<
- 
 
-typeChecking.o: typeChecking.cpp typeChecking.h 
+
+typeChecking.o: typeChecking.cpp typeChecking.h
 	$(CC) $(ObjectFlags) $<
 
-tokenize.o: tokenize.cpp 
-
+tokenize.o: tokenize.cpp
+	$(CC) $(ObjectFlags) $<
 
 
 
 
 clean:
-	rm *.o 
+	rm *.o
 	rm main

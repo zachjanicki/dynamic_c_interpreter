@@ -3,6 +3,7 @@
 #include <iostream>
 #include <regex>
 #include <string>
+#include "Token.h"
 using namespace std;
 
 bool isInt(string);
@@ -14,4 +15,4 @@ bool isLogicalOperator(string);
 bool isAssignmentOperator(string);
 bool isSemiColon(string);
 bool isKeyword(string);
-bool isSameType(Token, Token);
+bool isSameType(Token *, Token *);
