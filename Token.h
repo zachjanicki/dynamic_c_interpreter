@@ -28,6 +28,10 @@ public:
     string getVal(){
         return value;
     }
+
+    string getType() {
+        return type;
+    }
 private:
     string value;
     string type;

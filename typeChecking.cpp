@@ -72,3 +72,11 @@ bool isKeyword(string token) {
     // if token is in the keyword dictionary...
     return false;
 }
+
+bool isSameType(Token *token1, Token *token2) {
+    if (token1 == NULL || token2 == NULL) {
+        return false;
+    }
+
+    return (token1->getType() == token2->getType());
+}

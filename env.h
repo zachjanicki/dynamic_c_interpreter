@@ -30,57 +30,89 @@ class env {
         keywords.push_back("if"); keywords.push_back("in"); keywords.push_back("new");
         keywords.push_back("switch"); keywords.push_back("return");  keywords.push_back("true");
         keywords.push_back("var");  keywords.push_back("void"); keywords.push_back("while");
-        
+
         //push operators with functions -- not sure exactly how we want to do this
         operators["+"] = &add;
         operators["-"] = &sub;
         operators["*"] = &mult;
         operators["/"] = &div;
         operators["%"] = &mod;
-        
+        operators["++"] = &plusPlus;
+        operators["--"] = &minusMinus;
+        operators["+="] = &plusEquals;
+        operators["-="] = &minusEquals;
+        operators["*="] = &timesEquals;
+        operators["/="] = &divideEquals;
+
         //push booleans
         booleans["true"] = true;
         booleans["false"] = false;
-        
+
     }
-
-
-    private:
     vector <string> keywords;
     map <string, Variable> variables;
     map <string, Function> user_defined_functions;
     map <string, func> operators;
     map <string, BOOL> booleans;
-    
-    
+
+    private:
+
+
+
     template <typename T>
     T add(T term1, T term2) {
         return term1+term2;
-        
+
     }
     template <typename T>
     T sub(T term1, T term2) {
         return term1-term2;
     }
-    
+
     template <typename T>
     T mult(T term1, T term2) {
         return term1*term2;
     }
-    
+
     template <typename T>
     T div(T term1, T term2) {
         return term1/term2;
     }
-    
+
     template <typename T>
     T mod(T term1, T term2) {
         return term1%term2;
     }
 
+    template <typename T>
+    T plusPlus(T term) {
+        return term += 1;
+    }
+
+    template <typename T>
+    T minusMinus(T term) {
+        return term -= 1;
+    }
+
+    template <typename T>
+    T plusEquals(T term1, T term2) {
+        return term1 += term2;
+    }
+
+    template <typename T>
+    T minusEquals(T term1, T term2) {
+        return term1 -= term2;
+    }
+
+    template <typename T>
+    T timesEquals(T term1, T term2) {
+        return term1 *= term2;
+    }
+
+    template <typename T>
+    T divideEquals(T term1, T term2) {
+        return term1 /= term2;
+    }
 
 
 };
-
-
-
