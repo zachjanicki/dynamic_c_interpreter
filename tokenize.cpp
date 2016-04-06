@@ -2,6 +2,8 @@
 // tokenize function implementation
 #include "tokenize.h"
 #include <vector>
+#include "typeChecking.h"
+#include "Token.h"
 
 string checkType(string token) {
     if (isInt(token)) {
@@ -38,7 +40,7 @@ vector<Token*> seperateIntoTokens(string line) {
         if (line[i] != ' ') { // dealing with characters right next to each other "aabbas;, a=1, var==var2, ect..."
             characters += line[i];
             newToken = createToken(characters);
-        
+
             if (!isSameType(newToken, oldToken) && i != 0) { // then we need to add what we have onto the tokenList
                 if (!newToken.getType() != "Keyword") {
                     i--;
@@ -51,7 +53,7 @@ vector<Token*> seperateIntoTokens(string line) {
             else {
                 oldToken = newToken;
             }
-            
+
 
         } else { //there is a space so we add what we have to the tokenList and reset the struct
             tokenList.pushback(oldToken);
@@ -65,9 +67,9 @@ vector<Token*> seperateIntoTokens(string line) {
 
 
 
-////need a way to pass in line, startingPos, endingPos when creating token objects. 
+////need a way to pass in line, startingPos, endingPos when creating token objects.
 Token* createToken(string TokenStr) {
-    
+
     Token *currentToken;
     if (isInt(current)) {
         currentToken = new Integer();
@@ -88,9 +90,7 @@ Token* createToken(string TokenStr) {
     } else {
         currentToken = NULL;
     }
-    
+
     return currentToken;
-    
+
 }
-
-
