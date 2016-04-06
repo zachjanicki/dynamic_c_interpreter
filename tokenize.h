@@ -7,5 +7,5 @@
 #include <vector>
 
 string checkType(string);
-vector<Token *> seperateIntoTokens(string);
+vector<Token*> seperateIntoTokens(string);
 Token *createToken(string, int, int, int);

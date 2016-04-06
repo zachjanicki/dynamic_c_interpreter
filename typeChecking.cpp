@@ -13,7 +13,7 @@ bool isInt(string token) {
 }
 
 bool isFloat(string token) {
-    regex regularExpression("^[-+]?[0-9]*\\.[0-9]+$|[0-9]+\\.[0-9]*$");
+    regex regularExpression("^[-]?[0-9]*\\.?[0-9]*|\\.");//[0-9]+\\.[0-9]*$");
     if (regex_match(token, regularExpression)) {
         return true;
     }
@@ -21,7 +21,7 @@ bool isFloat(string token) {
 }
 /* deprecated
 bool isOperator(string token) {
-    regex regularExpression("^[+-/*<>]{1}$|^(<=)$|^(>=)$|^(eq)$");
+    regex regularExpression("^[+-*<>]{1}$|^(<=)$|^(>=)$|^(eq)$");
     if (regex_match(token, regularExpression)) {
         return true;
     }
@@ -29,7 +29,7 @@ bool isOperator(string token) {
 } */
 
 bool isArithOperator(string token) {
-    regex regularExpression("^[+-/*%]{1}$|^++$|^--$|^+=$|^-=$|^*=$|^/=$");
+    regex regularExpression("^[+-/*]{1}$|^\\+\\+$|^--$|^\\+=$|^-=$|^\\*=$|^/=$");
     if (regex_match(token, regularExpression)) {
         return true;
     }

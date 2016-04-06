@@ -35,25 +35,31 @@ vector<Token*> seperateIntoTokens(string line) {
     Token *oldToken;
     Token *newToken;
     int i;
+    oldToken = NULL;
+    int begin = 0;
+    cout << line << endl;
     for (i = 0; i < line.length(); i++) {
-        oldToken = NULL;
+
         if (line[i] != ' ') { // dealing with characters right next to each other "aabbas;, a=1, var==var2, ect..."
             characters += line[i];
             int startingPos = i - characters.length();
             int endingPos = i;
             newToken = createToken(characters, 0, startingPos, endingPos);
+            if (!isSameType(newToken, oldToken) && i != begin) { // then we need to add what we have onto the tokenList
 
-            if (!isSameType(newToken, oldToken) && i != 0) { // then we need to add what we have onto the tokenList
-                if (newToken->getType() != "Keyword") {
+                if (!newToken || newToken->getType() != "Keyword") {
+                    begin = i;
                     i--;
                     tokenList.push_back(oldToken);
                     newToken = NULL;
                     oldToken = NULL;
                     characters = "";
+
                 }
             }
             else {
                 oldToken = newToken;
+
             }
 
 
@@ -62,8 +68,11 @@ vector<Token*> seperateIntoTokens(string line) {
             newToken = NULL;
             oldToken = NULL;
             characters = "";
+            begin = i+1;
         }
     }
+
+    tokenList.push_back(oldToken);
     return tokenList;
 }
 
@@ -76,6 +85,7 @@ Token* createToken(string TokenStr, int line, int start, int end) {
     /*if (isInt(TokenStr)) {
         currentToken = new Integer();
     }*/
+
     if (isFloat(TokenStr)) {
         currentToken = new Float(TokenStr, line, start, end);
     } else if (isArithOperator(TokenStr)) {
