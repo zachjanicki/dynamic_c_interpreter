@@ -14,3 +14,4 @@ bool isLogicalOperator(string);
 bool isAssignmentOperator(string);
 bool isSemiColon(string);
 bool isKeyword(string);
+bool isSameType(Token, Token);

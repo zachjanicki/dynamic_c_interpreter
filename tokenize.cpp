@@ -1,6 +1,9 @@
 // tokenize.cpp
 // tokenize function implementation
-
+#include "tokenize.h"
+#include <vector>
+#include "typeChecking.h"
+#include "Token.h"
 
 string checkType(string token) {
     if (isInt(token)) {
@@ -24,35 +27,70 @@ string checkType(string token) {
     }
 }
 
-vector<string> seperateIntoStrings(string line) {
+vector<Token*> seperateIntoTokens(string line) {
     //a=1;
     //a = 1;
-    struct currentToken {
-        string characters;
-        string type;
-    };
-    vector<string> tokenList;
-    struct currentToken token;
+    string characters;
+    vector<Token*> tokenList;
+    Token *oldToken;
+    Token *newToken;
     int i;
     for (i = 0; i < line.length(); i++) {
-        token.type = checkType();
+        oldToken = NULL;
         if (line[i] != ' ') { // dealing with characters right next to each other "aabbas;, a=1, var==var2, ect..."
-            token.characters += line[i];
-            string tempTypeCheck = token.type;
-            token.type = checkType();
-            if (token.type != tempTypeCheck && i != 0) { // then we need to add what we have onto the tokenList
-                token.characters.pop_back();
-                i--;
-                tokenList.pushback(token.characters);
-                token.characters = "";
-                token.type = "";
+            characters += line[i];
+            newToken = createToken(characters);
+
+            if (!isSameType(newToken, oldToken) && i != 0) { // then we need to add what we have onto the tokenList
+                if (!newToken.getType() != "Keyword") {
+                    i--;
+                    tokenList.pushback(oldToken);
+                    newToken = NULL;
+                    oldToken = NULL;
+                    characters = "";
+                }
+            }
+            else {
+                oldToken = newToken;
             }
 
+
         } else { //there is a space so we add what we have to the tokenList and reset the struct
-            tokenList.pushback(token.characters);
-            token.characters = "";
-            token.type = "";
+            tokenList.pushback(oldToken);
+            newToken = NULL;
+            oldToken = NULL;
+            characters = "";
         }
     }
     return tokenList;
+}
+
+
+
+////need a way to pass in line, startingPos, endingPos when creating token objects.
+Token* createToken(string TokenStr) {
+
+    Token *currentToken;
+    if (isInt(current)) {
+        currentToken = new Integer();
+    } else if (isFloat(current)) {
+        currentToken = new Float();
+    } else if (isArithOperator(current)) {
+        currentToken = new ArithOperator();
+    } else if (isLogicalOperator(current)) {
+        currentToken = new LogicalOperator();
+    } else if (isAssignmentOperator(current)) {
+        currentToken = new AssignmentOperator();
+    } else if (isVariable(current)) {
+        currentToken = new Variable();
+    } else if (isSemiColon(current)) {
+        currentToken = new Symbol();
+    } else if (isKeyword(current)) {
+        currentToken = new Keyword();
+    } else {
+        currentToken = NULL;
+    }
+
+    return currentToken;
+
 }
