@@ -8,3 +8,4 @@
 
 string checkType(string);
 vector<string> seperateIntoStrings(string);
+Token *createToken(string);
