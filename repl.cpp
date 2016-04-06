@@ -5,17 +5,21 @@
 
 #include "Token.h"
 #include <vector>
+#include "tokenize.h"
 int main() {
     string js;
-    vector<Token> tokens;
+    vector<Token*> tokens;
     while (true) {
         // REPL!!
         cout << "js-> ";
-        cin >> js;
+        getline(cin, js);
         if (js == "exit") {
             break;
         }
-        tokens = js.tokenize() //or tokenize(js) ? depends on how we write that
-
+        tokens = seperateIntoTokens(js);
+        int i;
+        for (i = 0; i < tokens.size(); i++) {
+            cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
+        }
     }
 }
