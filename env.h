@@ -47,8 +47,14 @@ class env {
         //push booleans
         booleans["true"] = true;
         booleans["false"] = false;
+<<<<<<< HEAD
+        
+    }
+    
+=======
 
     }
+>>>>>>> 3fa912f63754a7949fac4127155504e760856185
     vector <string> keywords;
     map <string, Variable> variables;
     map <string, Function> user_defined_functions;
@@ -56,9 +62,13 @@ class env {
     map <string, BOOL> booleans;
 
     private:
+<<<<<<< HEAD
+    
+=======
 
 
 
+>>>>>>> 3fa912f63754a7949fac4127155504e760856185
     template <typename T>
     T add(T term1, T term2) {
         return term1+term2;

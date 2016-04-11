@@ -32,21 +32,19 @@ vector<Token*> seperateIntoTokens(string line) {
     //a = 1;
     string characters;
     vector<Token*> tokenList;
+    if (line.length() == 0) return tokenList; 
     Token *oldToken;
     Token *newToken;
-    int i;
     oldToken = NULL;
     int begin = 0;
     cout << line << endl;
-    for (i = 0; i < line.length(); i++) {
-
+    for (int i = 0; i < line.length(); i++) {
         if (line[i] != ' ') { // dealing with characters right next to each other "aabbas;, a=1, var==var2, ect..."
             characters += line[i];
             int startingPos = i - characters.length();
             int endingPos = i;
             newToken = createToken(characters, 0, startingPos, endingPos);
-            if (!isSameType(newToken, oldToken) && i != begin) { // then we need to add what we have onto the tokenList
-
+            if (!isSameType(newToken, oldToken) && i != begin && newToken->getType() != "LogicalOperator") { // then we need to add what we have onto the tokenList
                 if (!newToken || newToken->getType() != "Keyword") {
                     begin = i;
                     i--;
