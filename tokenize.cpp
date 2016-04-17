@@ -44,22 +44,20 @@ vector<Token*> seperateIntoTokens(string line) {
             int startingPos = i - characters.length();
             int endingPos = i;
             newToken = createToken(characters, 0, startingPos, endingPos);
-            if (!isSameType(newToken, oldToken) && i != begin && newToken->getType() != "LogicalOperator") { // then we need to add what we have onto the tokenList
-                if (!newToken || newToken->getType() != "Keyword") {
-                    begin = i;
-                    i--;
-                    tokenList.push_back(oldToken);
-                    newToken = NULL;
-                    oldToken = NULL;
-                    characters = "";
+            if (!isSameType(newToken, oldToken) && i != begin && newToken->getType() != "LogicalOperator" && newToken->getType() != "Keyword") { // then we need to add what we have onto the tokenList
 
-                }
+                begin = i;
+                i--;
+                tokenList.push_back(oldToken);
+                newToken = NULL;
+                oldToken = NULL;
+                characters = "";
+
             }
             else {
                 oldToken = newToken;
 
             }
-
 
         } else { //there is a space so we add what we have to the tokenList and reset the struct
             tokenList.push_back(oldToken);

@@ -70,6 +70,10 @@ bool isSemiColon(string token) {
 
 bool isKeyword(string token) {
     // if token is in the keyword dictionary...
+    //env *environ = new env();
+    //if (std::find(environ->keywords.begin(), environ->keywords.end(), token) != environ->keywords.end())
+    //return true; 
+
     return false;
 }
 
