@@ -15,16 +15,33 @@
 #include <cstring>
 #include <vector>
 
+
 using namespace std;
 
 class Token {
 public:
+    Token(){
+        value = "0";
+        type = "Token";
+        line = 0;
+        startingPos = 0;
+        endingPos = 0;
+    }
     Token(string val, string ty, int ln, int startingP, int endingP) {
         value = val;
         type = ty;
         line = ln;
         startingPos = startingP;
         endingPos = endingP;
+
+    }
+    Token& operator=( Token &token){
+        value = token.value;
+        type = token.type;
+        line = token.line;
+        startingPos = token.startingPos;
+        endingPos = token.endingPos;
+        return *this;
     }
     string getVal(){
         return value;
@@ -33,10 +50,22 @@ public:
     string getType() {
         return type;
     }
-private:
+    int getLine(){
+        return line;
+    }
+    int getStartingPos(){
+        return startingPos;
+    }
+    int getEndingPos(){
+        return endingPos;
+    }
+    virtual int getPrecedence(){
+        return precedence;
+    }
+
     string value;
     string type;
-    int line, startingPos, endingPos;
+    int line, startingPos, endingPos, precedence;
 
 
 };
@@ -47,11 +76,19 @@ public:
     Integer(string val, int line, int startingPos, int endingPos): Token(val, "Integer" ,line, startingPos, endingPos) {
         value = atoi(val.c_str());
     }
+
+    Integer& operator=( Integer &token){
+        value = token.value;
+        type = token.type;
+        line = token.line;
+        startingPos = token.startingPos;
+        endingPos = token.endingPos;
+        return *this;
+    }
     int getVal(){
         return value;
     }
 
-private:
     int value;
 
 };
@@ -61,10 +98,18 @@ public:
     Float(string val, int line, int startingPos, int endingPos): Token(val, "Float", line, startingPos, endingPos) {
         value = atof(val.c_str());
     }
+
+    Float& operator=( Float &token){
+        value = token.value;
+        type = token.type;
+        line = token.line;
+        startingPos = token.startingPos;
+        endingPos = token.endingPos;
+        return *this;
+    }
     float getVal(){
         return value;
     }
-private:
     float value;
 
 };
@@ -73,6 +118,7 @@ class Symbol : public Token {
 public:
     Symbol(string val, int line, int startingPos, int endingPos): Token(val, "Symbol", line, startingPos, endingPos) {
     }
+
 private:
 
 };
@@ -80,6 +126,25 @@ private:
 class Operator : public Token {
 public:
     Operator(string val, string type, int line, int startingPos, int endingPos): Token(val,type, line, startingPos, endingPos) {
+        if (val == "+" || val == "-"){
+            precedence = 0;
+        }
+        else if (val == "*" || val == "/"){
+            precedence = 1;
+
+        }
+    }
+    virtual int getPrecedence(){
+        return precedence;
+    }
+    Operator& operator=( Operator &token){
+        value = token.value;
+        type = token.type;
+        line = token.line;
+        startingPos = token.startingPos;
+        endingPos = token.endingPos;
+        precedence = token.precedence;
+        return *this;
     }
 private:
 
@@ -87,10 +152,13 @@ private:
 
 class ArithOperator: public Operator {
 public:
+
     ArithOperator(string val, int line, int startingPos, int endingPos): Operator(val, "ArithOperator", line, startingPos, endingPos){
 
     }
+
 private:
+    int precedence;
 
 };
 
