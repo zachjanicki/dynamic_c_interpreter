@@ -6,6 +6,7 @@
 #include "Token.h"
 #include "tokenize.h"
 #include "Parser.h"
+#include "env.h"
 
 int main() {
     string js;
@@ -17,16 +18,18 @@ int main() {
         if (js == "exit") {
             break;
         }
+
         tokens = seperateIntoTokens(js);
         int i;
         for (i = 0; i < tokens.size(); i++) {
             cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
         }
-        cout << endl;
+
+        env *environ = new env; 
         ASTNode *node;
         node = parse(tokens);
-        // printTree(node);
-
+        cout << "Root: " << node->token->getVal() << endl; 
+        printTree(node);
 
     }
 }

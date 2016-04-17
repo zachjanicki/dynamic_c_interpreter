@@ -16,62 +16,76 @@ using namespace std;
 
 
 ASTNode* parse(vector <Token *> tokens){
-    vector <ASTNode> nodes;
-    int length;
+    vector <ASTNode*> nodes;
+    int prevIndex;
     for (int i = 0; i < tokens.size(); i++){
-        ASTNode newNode;
-        newNode.token = *tokens[i];
-        newNode.left = NULL;
-        newNode.right = NULL;
+        ASTNode* newNode = new ASTNode; 
+        newNode->token = tokens[i];
+        newNode->left = NULL;
+        newNode->right = NULL;
         if (nodes.size() && i != 1){
 
         }
-        if (newNode.token.getType() == "Float"){
-            if (i == 0){
+        if (newNode->token->getType() != "ArithOperator" && newNode->token->getType() != "LogicalOperator" && newNode->token->getType() != "AssignmentOperator" ){
+            if (newNode->token->getVal() == "var") continue; 
+            if (nodes.size() == 0){
                 nodes.push_back(newNode);
             }
             else{
-                length = nodes.size() -1;
-                ASTNode prevNode;
-                prevNode = nodes[length];
-                if (prevNode.token.getType() == "ArithOperator"){
-                    prevNode.right = &newNode;
+                prevIndex = nodes.size() -1;
+                ASTNode *prevNode;
+                prevNode = nodes[prevIndex];
+                ASTNode* temp = prevNode;
+                while (temp->right != NULL)
+                    temp = temp->right; 
+                if (temp->token->getType() == "ArithOperator" || temp->token->getType() == "LogicalOperator" || temp->token->getType() == "AssignmentOperator")  
+                    temp->right = newNode; 
+                else {
+                    if (prevNode->token->getType() == "ArithOperator" || newNode->token->getType() == "LogicalOperator" || newNode->token->getType() == "AssignmentOperator" ){
+                        if (prevNode->right == NULL)
+                        prevNode->right = newNode;
+                        else {
+                            cout << "Error" << endl; 
+                        }
 
+                    }
                 }
             }
         }
-        else if ( newNode.token.getType() == "ArithOperator" ) {
+        //if an operator
+        else {
             if (nodes.size() == 0){
                 throw "Error";
             }
-            length = nodes.size() -1 ;
-            ASTNode prevNode;
-            prevNode = nodes[length];
-            if (prevNode.token.getType() == "Float"){
-                newNode.left = &prevNode;
-                nodes[length] = newNode;
+            prevIndex = nodes.size() -1 ;
+            ASTNode *prevNode;
+            prevNode = nodes[prevIndex];
+            if (prevNode->token->getType() != "ArithOperator" && prevNode->token->getType() != "LogicalOperator" && prevNode->token->getType() != "AssignmentOperator"){
+                newNode->left = prevNode;
+                nodes[prevIndex] = newNode;
 
             }
-            else if (prevNode.token.getType() == "ArithOperator"){
-                if (prevNode.token.getPrecedence() < newNode.token.getPrecedence()){
-                    ASTNode tempNode;
+            else{
+                if (prevNode->token->getPrecedence() < newNode->token->getPrecedence()){
+                   // cout << prevNode->token->getVal() << " < " << newNode->token->getVal() << endl; 
+                    ASTNode *tempNode;
                     tempNode = prevNode;
-                    newNode.left = tempNode.right;
-                    prevNode.right = &newNode;
+                    newNode->left = tempNode->right;
+                    tempNode->right = newNode;
                 }
                 else {
-                    ASTNode tempNode;
-                    tempNode = prevNode;
-                    newNode.left = &prevNode;
-                    nodes[length] = newNode;
+                    newNode->left = prevNode;
+                    nodes[prevIndex] = newNode;
+
 
                 }
 
             }
 
         }
+        
     }
-    return &nodes[0];
+    return nodes[0];
 
 
 
@@ -81,7 +95,7 @@ ASTNode* parse(vector <Token *> tokens){
 void printTree(ASTNode *node){
     if (node != NULL){
         printTree(node -> left);
-        cout << node -> token.getVal() << endl;
+        cout << node -> token->getVal() << endl;
         printTree(node -> right);
     }
 

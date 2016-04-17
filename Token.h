@@ -65,7 +65,9 @@ public:
 
     string value;
     string type;
-    int line, startingPos, endingPos, precedence;
+    int line, startingPos, endingPos;
+protected: 
+    int precedence; 
 
 
 };
@@ -126,13 +128,19 @@ private:
 class Operator : public Token {
 public:
     Operator(string val, string type, int line, int startingPos, int endingPos): Token(val,type, line, startingPos, endingPos) {
-        if (val == "+" || val == "-"){
-            precedence = 0;
+        if (val == "=") { 
+            precedence = 1; 
+        }
+        else if (val == "+" || val == "-"){
+            precedence = 3;
         }
         else if (val == "*" || val == "/"){
-            precedence = 1;
-
+            precedence = 4;
         }
+        else if (val == ">=" || val == "<=" || val == "<" || val == ">" || val == "==") {
+            precedence = 2; 
+        }
+
     }
     virtual int getPrecedence(){
         return precedence;
@@ -154,8 +162,8 @@ class ArithOperator: public Operator {
 public:
 
     ArithOperator(string val, int line, int startingPos, int endingPos): Operator(val, "ArithOperator", line, startingPos, endingPos){
-
     }
+
 
 private:
     int precedence;
@@ -172,8 +180,8 @@ public:
 class LogicalOperator: public Operator {
 public:
     LogicalOperator(string val, int line, int startingPos, int endingPos): Operator(val, "LogicalOperator", line, startingPos, endingPos){
-
     }
+
 };
 
 

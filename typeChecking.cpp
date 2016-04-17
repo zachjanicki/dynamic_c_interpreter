@@ -3,6 +3,7 @@
 using namespace std;
 
 #include "typeChecking.h"
+#include "env.h"
 
 bool isInt(string token) {
     regex regularExpression("^[+-]?[0-9]+$|^[0-9]+$");
@@ -70,11 +71,9 @@ bool isSemiColon(string token) {
 
 bool isKeyword(string token) {
     // if token is in the keyword dictionary...
-    //env *environ = new env();
-    //if (std::find(environ->keywords.begin(), environ->keywords.end(), token) != environ->keywords.end())
-    //return true; 
-
-    return false;
+    env *environ = new env();
+    if (std::find(environ->keywords.begin(), environ->keywords.end(), token) != environ->keywords.end())
+    return true; 
 }
 
 bool isSameType(Token *token1, Token *token2) {

@@ -12,7 +12,7 @@
 struct ASTNode{
     ASTNode *left;
     ASTNode *right;
-    Token token;
+    Token *token;
 };
 
 

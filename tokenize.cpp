@@ -30,22 +30,20 @@ string checkType(string token) {
 vector<Token*> seperateIntoTokens(string line) {
     //a=1;
     //a = 1;
-    string characters;
+    string characters = "";
     vector<Token*> tokenList;
     if (line.length() == 0) return tokenList;
     Token *oldToken;
     Token *newToken;
     oldToken = NULL;
     int begin = 0;
-    cout << line << endl;
     for (int i = 0; i < line.length(); i++) {
         if (line[i] != ' ') { // dealing with characters right next to each other "aabbas;, a=1, var==var2, ect..."
-            characters += line[i];
             int startingPos = i - characters.length();
+            characters += line[i];
             int endingPos = i;
             newToken = createToken(characters, 0, startingPos, endingPos);
-            if (!isSameType(newToken, oldToken) && i != begin && newToken->getType() != "LogicalOperator" && newToken->getType() != "Keyword") { // then we need to add what we have onto the tokenList
-
+            if (!isSameType(newToken, oldToken) && i != begin && (!newToken || (newToken->getType() != "LogicalOperator" && newToken->getType() != "Keyword"))) { // then we need to add what we have onto the tokenList
                 begin = i;
                 i--;
                 tokenList.push_back(oldToken);
@@ -67,7 +65,6 @@ vector<Token*> seperateIntoTokens(string line) {
             begin = i+1;
         }
     }
-
     tokenList.push_back(oldToken);
     return tokenList;
 }
@@ -81,21 +78,20 @@ Token* createToken(string TokenStr, int line, int start, int end) {
     /*if (isInt(TokenStr)) {
         currentToken = new Integer();
     }*/
-
-    if (isFloat(TokenStr)) {
-        currentToken = new Float(TokenStr, line, start, end);
-    } else if (isArithOperator(TokenStr)) {
+    if (isArithOperator(TokenStr)) {
         currentToken = new ArithOperator(TokenStr, line, start, end);
+    } else if (isFloat(TokenStr)) {
+        currentToken = new Float(TokenStr, line, start, end);
     } else if (isLogicalOperator(TokenStr)) {
         currentToken = new LogicalOperator(TokenStr, line, start, end);
     } else if (isAssignmentOperator(TokenStr)) {
         currentToken = new AssignmentOperator(TokenStr, line, start, end);
+    } else if (isKeyword(TokenStr)) {
+        currentToken = new Keyword(TokenStr, line, start, end);
     } else if (isVariable(TokenStr)) {
         currentToken = new Variable(TokenStr, line, start, end);
     } else if (isSemiColon(TokenStr)) {
         currentToken = new Symbol(TokenStr, line, start, end);
-    } else if (isKeyword(TokenStr)) {
-        currentToken = new Keyword(TokenStr, line, start, end);
     } else {
         currentToken = NULL;
     }
