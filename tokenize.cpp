@@ -32,7 +32,7 @@ vector<Token*> seperateIntoTokens(string line) {
     //a = 1;
     string characters;
     vector<Token*> tokenList;
-    if (line.length() == 0) return tokenList; 
+    if (line.length() == 0) return tokenList;
     Token *oldToken;
     Token *newToken;
     oldToken = NULL;
