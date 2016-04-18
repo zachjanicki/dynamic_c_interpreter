@@ -17,3 +17,4 @@ bool isAssignmentOperator(string);
 bool isSemiColon(string);
 bool isKeyword(string);
 bool isSameType(Token *, Token *);
+bool isScopeSym(string);

@@ -22,6 +22,8 @@ string checkType(string token) {
         return "Semicolon";
     } else if (isKeyword(token)) {
         return "Keyword";
+    } else if (isScopeSym(token)) {
+        return "Scope Symbol";
     } else {
         return "Undefined Token Type";
     }
@@ -91,8 +93,10 @@ Token* createToken(string TokenStr, int line, int start, int end) {
     } else if (isVariable(TokenStr)) {
         currentToken = new Variable(TokenStr, line, start, end);
     } else if (isSemiColon(TokenStr)) {
-        currentToken = new Symbol(TokenStr, line, start, end);
-    } else {
+        currentToken = new Symbol(TokenStr, "Semicolon", line, start, end);
+    } else if (isScopeSym(TokenStr)) {
+        currentToken = new ScopeSym(TokenStr, line, start, end);
+    }  else {
         currentToken = NULL;
     }
 

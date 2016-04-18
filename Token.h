@@ -63,11 +63,13 @@ public:
         return precedence;
     }
 
+
+ 
     string value;
     string type;
-    int line, startingPos, endingPos;
+    int line, startingPos, endingPos, precedence; 
 protected: 
-    int precedence; 
+    
 
 
 };
@@ -118,26 +120,44 @@ public:
 
 class Symbol : public Token {
 public:
-    Symbol(string val, int line, int startingPos, int endingPos): Token(val, "Symbol", line, startingPos, endingPos) {
+    Symbol(string val, string type, int line, int startingPos, int endingPos): Token(val, type, line, startingPos, endingPos) {
+     if (val == "[" || val == "(") 
+            precedence = 0; 
+        else 
+            precedence= 1; 
     }
+
+
 
 private:
 
+    
+
 };
+class ScopeSym : public Symbol {
+public:
+    ScopeSym(string val, int line, int startingPos, int endingPos): Symbol(val, "Scope Symbol", line, startingPos, endingPos) {
+    };
+
+private:
+    
+
+};
+
 
 class Operator : public Token {
 public:
     Operator(string val, string type, int line, int startingPos, int endingPos): Token(val,type, line, startingPos, endingPos) {
-        if (val == "=") { 
+        if (val == "=" || val == "*=" || val == "+=" || val == "-=" || val == "/=") { 
             precedence = 1; 
         }
         else if (val == "+" || val == "-"){
             precedence = 3;
         }
-        else if (val == "*" || val == "/"){
+        else if (val == "*" || val == "/" || val == "%"){
             precedence = 4;
         }
-        else if (val == ">=" || val == "<=" || val == "<" || val == ">" || val == "==") {
+        else if (val == ">=" || val == "<=" || val == "<" || val == ">" || val == "==" || val == "!=") {
             precedence = 2; 
         }
 
@@ -145,6 +165,8 @@ public:
     virtual int getPrecedence(){
         return precedence;
     }
+
+
     Operator& operator=( Operator &token){
         value = token.value;
         type = token.type;
@@ -166,7 +188,6 @@ public:
 
 
 private:
-    int precedence;
 
 };
 

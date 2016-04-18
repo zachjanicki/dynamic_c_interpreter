@@ -30,7 +30,7 @@ bool isOperator(string token) {
 } */
 
 bool isArithOperator(string token) {
-    regex regularExpression("^[+-/*]{1}$|^\\+\\+$|^--$|^\\+=$|^-=$|^\\*=$|^/=$");
+    regex regularExpression("^[+-/*%]{1}$|^\\+\\+$|^--$|^\\+=$|^-=$|^\\*=$|^/=$");
     if (regex_match(token, regularExpression)) {
         return true;
     }
@@ -38,7 +38,7 @@ bool isArithOperator(string token) {
 }
 
 bool isLogicalOperator(string token) {
-    regex regularExpression("^[<>]{1}$|^==$|^<=$|^>=$");
+    regex regularExpression("^[<>]{1}$|^==$|^<=$|^>=$|^!=$");
     if (regex_match(token, regularExpression)) {
         return true;
     }
@@ -59,6 +59,14 @@ bool isVariable(string token) {
         return true;
     }
     return false;
+}
+
+bool isScopeSym(string token) {
+    regex regularExpression("^[\\[\\]()]$");
+    if (regex_match(token, regularExpression)) {
+        return true; 
+    }
+    else return false; 
 }
 
 bool isSemiColon(string token) {

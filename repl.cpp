@@ -13,7 +13,7 @@ int main() {
     vector<Token*> tokens;
     while (true) {
         // REPL!!
-        cout << "js-> ";
+        cout << "JS-> ";
         getline(cin, js);
         if (js == "exit") {
             break;
@@ -22,14 +22,14 @@ int main() {
         tokens = seperateIntoTokens(js);
         int i;
         for (i = 0; i < tokens.size(); i++) {
-            cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
+          //  cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
         }
-
-        env *environ = new env; 
-        ASTNode *node;
-        node = parse(tokens);
-        cout << "Root: " << node->token->getVal() << endl; 
-        printTree(node);
-
+        if (tokens.size() > 0) {
+            env *environ = new env; 
+            ASTNode *node;
+            node = parse(tokens);
+            cout << "Root: " << node->token->getVal() << endl; 
+            printTree(node);
+        }
     }
 }
