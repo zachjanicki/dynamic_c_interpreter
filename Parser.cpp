@@ -22,13 +22,22 @@ ASTNode* parse(vector <Token *> tokens){
     stack<Token*> scopeStack; 
     for (int i = 0; i < tokens.size(); i++){
 
-        ASTNode* newNode = new ASTNode; 
+        /* ------- CREATE NEW ASTNode --------- */
+        ASTNode* newNode; 
+        Token *current = tokens[i]; 
+        if (current->getVal() == ";") return nodes[0]; 
+        else newNode = new ASTNode; 
         newNode->left = NULL;
         newNode->right = NULL;
         newNode->token = tokens[i];
-        if (newNode->token->getType() != "ArithOperator" && newNode->token->getType() != "LogicalOperator" && newNode->token->getType() != "AssignmentOperator" ){
+
+        /* -------- PARSE --------- */
+        if (newNode->token->getType() != "Keyword" && newNode->token->getType() != "ArithOperator" && newNode->token->getType() != "LogicalOperator" && newNode->token->getType() != "AssignmentOperator" ){
             if (newNode->token->getVal() == "var") continue;  
+
+            /* ---------- DEALS WITH SCOPE OPERATORS '(' AND '[' ------------ */
             if (tokens[i]->getType() == "Scope Symbol" && tokens[i]->getPrecedence() == 0) {
+                if (tokens[i]->getVal() == "{" && nodes[0]->token->getType() != "Keyword") { error("Syntax Error: Invalid separators"); return NULL; }
                 scopeStack.push(tokens[i]);
                 vector<Token*>subTokens; 
                 int j = i+1; 
@@ -40,23 +49,30 @@ ASTNode* parse(vector <Token *> tokens){
                         else {
                             if (scopeStack.top()->getVal() == "[") {
                                 if (tokens[j]->getVal() == "]") scopeStack.pop(); 
-                                else cout << "Invalid separators error" << endl; 
+                                else { error("Syntax Error: Unbalanced separators"); return NULL; }
+                            }
+                            else if (scopeStack.top()->getVal() == "(") {
+                                if (tokens[j]->getVal() == ")") scopeStack.pop(); 
+                                else { error("Syntax Error: Unbalanced separators"); return NULL; }
                             }
                             else {
-                                if (tokens[j]->getVal() == ")") scopeStack.pop(); 
-                                else cout << "Invalid separators error" << endl; 
+                                if (tokens[j]->getVal() == "}") scopeStack.pop(); 
+                                else { error("Syntax Error: Unbalanced separators"); return NULL; }
                             }
                         }
                     }
                     j++; 
 
                 }
-                if (j > tokens.size()) cout << "Invalid separators error"; 
+
+                if (j > tokens.size()) { error("Syntax Error: Unbalanced separators"); return NULL; }
                 subTokens.pop_back(); 
                 newNode = parse(subTokens);
                 newNode->token->precedence = 5; 
                 i = j-1; 
             }
+                /* ---------- END SCOPE HANDLING ----------- */
+
             if (nodes.size() == 0){
                 nodes.push_back(newNode);
             }
@@ -65,22 +81,41 @@ ASTNode* parse(vector <Token *> tokens){
                 ASTNode *prevNode;
                 prevNode = nodes[prevIndex];
                 ASTNode* temp = prevNode;
-                while (temp->right != NULL)
-                    temp = temp->right; 
-                if (temp->token->getType() == "ArithOperator" || temp->token->getType() == "LogicalOperator" || temp->token->getType() == "AssignmentOperator" ){
-                    if (temp->right == NULL)
-                        temp->right = newNode;
-                    else {
-                        cout << "Error" << endl; 
+                if (temp->left == NULL) temp->left = newNode; 
+                else {
+                    while (temp->right != NULL)
+                        temp = temp->right; 
+                    if (temp->token->getType() == "ArithOperator" || temp->token->getType() == "LogicalOperator" || temp->token->getType() == "AssignmentOperator" ){
+                        if (temp->right == NULL)
+                            temp->right = newNode;
+                        else {
+                            error("Syntax Error: Exiting parser.");
+                            return NULL; 
+                        }
+                    }
+                    else if (temp->token->getType() == "Keyword") {
+                        if (temp->token->getVal() == "if") {
+                            if (temp->center == NULL) temp->center = newNode; 
+                            else if (temp->right == NULL) temp->right = newNode; 
+                            else {
+                                error("Syntax Error: Exiting parser.");
+                                return NULL; 
+                            }
+                        }
                     }
                 }
                 
             }
         }
         //if an operator
+        else if (newNode->token->getType() == "Keyword"){ 
+            if (nodes.size() == 0) nodes.push_back(newNode); 
+            else error("Syntax Error: Invalid Keyword");
+        }
         else {
             if (nodes.size() == 0){
-                throw "Error";
+                error("Syntax Error: Invalid operator");
+                return NULL; 
             }
             prevIndex = nodes.size() -1 ;
             ASTNode *prevNode;
@@ -88,10 +123,10 @@ ASTNode* parse(vector <Token *> tokens){
             if (prevNode->token->getType() != "ArithOperator" && prevNode->token->getType() != "LogicalOperator" && prevNode->token->getType() != "AssignmentOperator"){
                 newNode->left = prevNode;
                 nodes[prevIndex] = newNode;
-
             }
             else{
                 if (prevNode->token->getPrecedence() < newNode->token->getPrecedence()){
+
                     ASTNode *tempNode;
                     tempNode = prevNode;
                     newNode->left = tempNode->right;
@@ -100,8 +135,6 @@ ASTNode* parse(vector <Token *> tokens){
                 else {
                     newNode->left = prevNode;
                     nodes[prevIndex] = newNode;
-
-
                 }
 
             }
@@ -110,9 +143,10 @@ ASTNode* parse(vector <Token *> tokens){
         
     }
     return nodes[0];
+}
 
-
-
+void error(string message) {
+    cout << message << endl; 
 }
 
 
@@ -122,8 +156,6 @@ void printTree(ASTNode *node){
         cout << node -> token->getVal() << endl;
         printTree(node -> right);
     }
-
-
 
 
 }

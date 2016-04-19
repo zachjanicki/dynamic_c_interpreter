@@ -62,7 +62,7 @@ bool isVariable(string token) {
 }
 
 bool isScopeSym(string token) {
-    regex regularExpression("^[\\[\\]()]$");
+    regex regularExpression("^[\\[\\](){}]$");
     if (regex_match(token, regularExpression)) {
         return true; 
     }

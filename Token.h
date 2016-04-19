@@ -121,7 +121,7 @@ public:
 class Symbol : public Token {
 public:
     Symbol(string val, string type, int line, int startingPos, int endingPos): Token(val, type, line, startingPos, endingPos) {
-     if (val == "[" || val == "(") 
+     if (val == "[" || val == "(" || val == "{") 
             precedence = 0; 
         else 
             precedence= 1; 

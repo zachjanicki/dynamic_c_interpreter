@@ -60,14 +60,15 @@ vector<Token*> seperateIntoTokens(string line) {
             }
 
         } else { //there is a space so we add what we have to the tokenList and reset the struct
-            tokenList.push_back(oldToken);
+            if (oldToken) tokenList.push_back(oldToken);
             newToken = NULL;
             oldToken = NULL;
             characters = "";
             begin = i+1;
         }
     }
-    tokenList.push_back(oldToken);
+
+    if (oldToken) tokenList.push_back(oldToken);
     return tokenList;
 }
 

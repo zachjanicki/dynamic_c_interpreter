@@ -9,7 +9,9 @@
 #include "env.h"
 
 int main() {
+    //input line
     string js;
+    //vector containing input tokens
     vector<Token*> tokens;
     while (true) {
         // REPL!!
@@ -18,7 +20,7 @@ int main() {
         if (js == "exit") {
             break;
         }
-
+        //separate line into individual tokens
         tokens = seperateIntoTokens(js);
         int i;
         for (i = 0; i < tokens.size(); i++) {
@@ -28,8 +30,10 @@ int main() {
             env *environ = new env; 
             ASTNode *node;
             node = parse(tokens);
-            cout << "Root: " << node->token->getVal() << endl; 
-            printTree(node);
+            if (node != NULL) {
+                cout << "Root: " << node->token->getVal() << endl; 
+                printTree(node);
+            }   
         }
     }
 }

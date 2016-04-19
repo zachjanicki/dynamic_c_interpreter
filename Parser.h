@@ -9,17 +9,24 @@
 #ifndef Parser_h
 #define Parser_h
 
-struct ASTNode{
+class ASTNode {
+
+public: 
     ASTNode *left;
+    ASTNode *center; 
     ASTNode *right;
     Token *token;
+
 };
+
+
 
 
 
 ASTNode* parse(vector <Token *> tokens);
 
 void printTree(ASTNode *node);
+void error(string message); 
 
 
 #endif
