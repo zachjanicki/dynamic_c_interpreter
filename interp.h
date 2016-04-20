@@ -9,12 +9,14 @@
 #include <vector>
 #include "Token.h"
 #include "env.h"
+#include "Parser.h"
 
 #ifndef INTERP_H
 #define INTERP_H
 
 
-int interp(vector <Token *>, env &);
+Token interp(ASTNode *, env *);
+Token interpArithmeticExpression(ASTNode *, env *);
 
 
 

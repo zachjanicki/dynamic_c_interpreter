@@ -7,6 +7,7 @@
 #include "tokenize.h"
 #include "Parser.h"
 #include "env.h"
+#include "interp.h"
 
 int main() {
     //input line
@@ -27,13 +28,15 @@ int main() {
           //  cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
         }
         if (tokens.size() > 0) {
-            env *environ = new env; 
+            env *environ = new env;
             ASTNode *node;
             node = parse(tokens);
             if (node != NULL) {
-                cout << "Root: " << node->token->getVal() << endl; 
+                cout << "Root: " << node->token->getVal() << endl;
                 printTree(node);
-            }   
+                Token test = interp(node, environ);
+                cout << test.getVal() << endl;
+            }
         }
     }
 }
