@@ -29,7 +29,7 @@ class env {
         keywords.push_back("default"); keywords.push_back("delete"); keywords.push_back("function");
         keywords.push_back("if"); keywords.push_back("in"); keywords.push_back("new");
         keywords.push_back("switch"); keywords.push_back("return");  keywords.push_back("true");
-        keywords.push_back("var");  keywords.push_back("void"); keywords.push_back("while");
+        keywords.push_back("var");  keywords.push_back("void"); keywords.push_back("while"); keywords.push_back("else");
 
         //push operators with functions -- not sure exactly how we want to do this
        /* operators["+"] = &add;
