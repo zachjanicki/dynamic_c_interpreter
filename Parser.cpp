@@ -25,10 +25,11 @@ ASTNode* parse(vector <Token *> tokens){
         /* ------- CREATE NEW ASTNode --------- */
         ASTNode* newNode; 
         Token *current = tokens[i]; 
-        if (current->getVal() == ";") return nodes[0]; 
+        if (current->getVal() == ";" ) return nodes[0]; 
         else newNode = new ASTNode; 
         newNode->left = NULL;
         newNode->right = NULL;
+        newNode->center = NULL; 
         newNode->token = tokens[i];
 
         /* -------- PARSE --------- */
@@ -95,7 +96,7 @@ ASTNode* parse(vector <Token *> tokens){
                     }
                     else if (temp->token->getType() == "Keyword") {
                         if (temp->token->getVal() == "if") {
-                            if (temp->center == NULL) temp->center = newNode; 
+                            if (temp->center == NULL) temp->center = newNode;  
                             else if (temp->right == NULL) temp->right = newNode; 
                             else {
                                 error("Syntax Error: Exiting parser.");
@@ -109,8 +110,10 @@ ASTNode* parse(vector <Token *> tokens){
         }
         //if an operator
         else if (newNode->token->getType() == "Keyword"){ 
+            if (newNode->token->getVal() == "else" || newNode->token->getVal() == "var") continue; 
             if (nodes.size() == 0) nodes.push_back(newNode); 
             else error("Syntax Error: Invalid Keyword");
+
         }
         else {
             if (nodes.size() == 0){
@@ -154,6 +157,7 @@ void printTree(ASTNode *node){
     if (node != NULL){
         printTree(node -> left);
         cout << node -> token->getVal() << endl;
+        printTree(node->center); 
         printTree(node -> right);
     }
 
