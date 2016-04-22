@@ -13,8 +13,9 @@ class ASTNode {
 
 public: 
     ASTNode *left;
-    ASTNode *center; 
+    ASTNode *leftcenter; 
     ASTNode *right;
+    ASTNode *rightcenter;
     Token *token;
 
 };
