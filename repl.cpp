@@ -14,6 +14,7 @@ int main() {
     string js;
     //vector containing input tokens
     vector<Token*> tokens;
+    env *environ = new env;
     while (true) {
         // REPL!!
         cout << "JS-> ";
@@ -25,10 +26,10 @@ int main() {
         tokens = seperateIntoTokens(js);
         int i;
         for (i = 0; i < tokens.size(); i++) {
-          //  cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
+           cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
         }
         if (tokens.size() > 0) {
-            env *environ = new env;
+
             ASTNode *node;
             node = parse(tokens);
             if (node != NULL) {
