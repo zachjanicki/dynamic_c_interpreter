@@ -66,7 +66,6 @@ Token interp(ASTNode *root, env * environment) {
     if (root -> token -> getType() == "Float") {
         return *root -> token;
     } else if (root -> token -> getType() == "Variable") {
-
         if (environment -> variables.count(root -> token -> getVal())) {
             return environment -> variables.at(root -> token -> getVal());
         } else {
@@ -85,6 +84,51 @@ Token interp(ASTNode *root, env * environment) {
             return Token(to_string(stof(interp(root -> left, environment).getVal()) * stof(interp(root -> right, environment).getVal())), "Float", 0, 0, 0);
         } else if (root -> token -> getVal() == "/") {
             return Token(to_string(stof(interp(root -> left, environment).getVal()) / stof(interp(root -> right, environment).getVal())), "Float", 0, 0, 0);
+        }
+    } else if (root -> token -> getType() == "LogicalOperator") {
+        int logic;
+        if (root -> token -> getVal() == "<") {
+            logic = interp(root -> left, environment).getVal() < interp(root -> right, environment).getVal();
+            if (logic) {
+                return Token("1", "Float", 0, 0, 0);
+            } else {
+                return Token("0", "Float", 0, 0, 0);
+            }
+        } else if (root -> token -> getVal() == ">") {
+            logic = interp(root -> left, environment).getVal() > interp(root -> right, environment).getVal();
+            if (logic) {
+                return Token("1", "Float", 0, 0, 0);
+            } else {
+                return Token("0", "Float", 0, 0, 0);
+            }
+        } else if (root -> token -> getVal() == "!=") {
+            logic = interp(root -> left, environment).getVal() != interp(root -> right, environment).getVal();
+            if (logic) {
+                return Token("1", "Float", 0, 0, 0);
+            } else {
+                return Token("0", "Float", 0, 0, 0);
+            }
+        } else if (root -> token -> getVal() == "==") {
+            logic = interp(root -> left, environment).getVal() == interp(root -> right, environment).getVal();
+            if (logic) {
+                return Token("1", "Float", 0, 0, 0);
+            } else {
+                return Token("0", "Float", 0, 0, 0);
+            }
+        } else if (root -> token -> getVal() == "<=") {
+            logic = interp(root -> left, environment).getVal() <= interp(root -> right, environment).getVal();
+            if (logic) {
+                return Token("1", "Float", 0, 0, 0);
+            } else {
+                return Token("0", "Float", 0, 0, 0);
+            }
+        } else if (root -> token -> getVal() == ">=") {
+            logic = interp(root -> left, environment).getVal() >= interp(root -> right, environment).getVal();
+            if (logic) {
+                return Token("1", "Float", 0, 0, 0);
+            } else {
+                return Token("0", "Float", 0, 0, 0);
+            }
         }
     }
 }
