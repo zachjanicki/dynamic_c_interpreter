@@ -5,7 +5,7 @@ all: main
 
 
 main: repl.o typeChecking.o tokenize.o Parser.o Token.h interp.o
-	$(CC) $(CPPFLAGS) main repl.o typeChecking.o tokenize.o Parser.o interp.o
+	$(CC) $(CPPFLAGS) js repl.o typeChecking.o tokenize.o Parser.o interp.o
 
 repl.o: repl.cpp Token.h
 	$(CC) $(ObjectFlags) $<

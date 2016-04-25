@@ -5,6 +5,7 @@
 #include "typeChecking.h"
 #include "Token.h"
 
+//checks the type of a token
 string checkType(string token) {
     if (isInt(token)) {
         return "Int";
@@ -29,6 +30,8 @@ string checkType(string token) {
     }
 }
 
+
+//breaks a string into a vector of token pointers
 vector<Token*> seperateIntoTokens(string line) {
     //a=1;
     //a = 1;
@@ -78,9 +81,6 @@ vector<Token*> seperateIntoTokens(string line) {
 Token* createToken(string TokenStr, int line, int start, int end) {
 
     Token *currentToken;
-    /*if (isInt(TokenStr)) {
-        currentToken = new Integer();
-    }*/
     if (isArithOperator(TokenStr)) {
         currentToken = new ArithOperator(TokenStr, line, start, end);
     } else if (isFloat(TokenStr)) {
@@ -104,3 +104,5 @@ Token* createToken(string TokenStr, int line, int start, int end) {
     return currentToken;
 
 }
+
+

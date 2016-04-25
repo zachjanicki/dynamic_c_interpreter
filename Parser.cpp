@@ -13,6 +13,7 @@
 #include "Token.h"
 #include "Parser.h"
 #include <stack>
+#include "tokenize.h"
 using namespace std;
 
 //parses the text based on a vector of token pointers
@@ -113,11 +114,23 @@ ASTNode* parse(vector <Token *> tokens){
                 nodes.push_back(newNode);
             }
             else{
-                if (prevNode->left == NULL) prevNode->left = newNode; 
+                if (prevNode->left == NULL && prevNode->token->getVal() != "-") {
+                    prevNode->left = newNode; 
+                }
                 else {
                     //check right side for placement
                     while (prevNode->right != NULL)
                         prevNode = prevNode->right; 
+
+                    if (prevNode->left == NULL && prevNode->token->getVal() == "-") {
+                        Token *prevToken = prevNode->token; 
+                        Token *newToken = newNode->token; 
+                        string minus = "-"; 
+                        Token *tempToken = new Float(minus.append(newToken->getVal()), newToken->getLine(), newToken->getStartingPos(), newToken->getEndingPos()); 
+                        delete prevToken; 
+                        prevNode->token = tempToken; 
+                        continue; 
+                    }
 
                     //if we have an if statement, use the center node
                     if (prevNode->token->getVal() == "if") {
@@ -160,15 +173,21 @@ ASTNode* parse(vector <Token *> tokens){
         else {
             //if begins with an operator, something is wrong 
             if (nodes.size() == 0){
-                error("Syntax Error: Invalid operator");
-                return NULL; 
+                if (newNode->token->getVal() != "-") {
+                    error("Syntax Error: Invalid operator");
+                    return NULL; 
+                }
+                else {
+                    nodes.push_back(newNode); 
+                }
             }
-            if (prevNode->token->getType() != "ArithOperator" && prevNode->token->getType() != "LogicalOperator" && prevNode->token->getType() != "AssignmentOperator"){
+            else if (prevNode->token->getType() != "ArithOperator" && prevNode->token->getType() != "LogicalOperator" && prevNode->token->getType() != "AssignmentOperator"){
+                if (newNode->token->getVal() == "=" && prevNode->token->getType() == "Float") { error("Syntax Error: Literals are unassigable"); return NULL;}
                 newNode->left = prevNode;
                 nodes[prevIndex] = newNode;
             }
             else{
-                if (prevNode->token->getPrecedence() < newNode->token->getPrecedence()){
+                if (prevNode->token->getPrecedence() <= newNode->token->getPrecedence()){
                     newNode->left = prevNode->right;
                     prevNode->right = newNode;
                 }
@@ -184,6 +203,7 @@ ASTNode* parse(vector <Token *> tokens){
     }
     return nodes[0];
 }
+
 
 
 

@@ -5,7 +5,6 @@
 //  Created by Pierce Cunneen on 4/10/2016
 //
 //
-
 #ifndef Parser_h
 #define Parser_h
 
@@ -19,9 +18,6 @@ public:
     Token *token;
 
 };
-
-
-
 
 
 ASTNode* parse(vector <Token *> tokens);
