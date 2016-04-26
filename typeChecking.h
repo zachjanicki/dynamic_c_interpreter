@@ -9,6 +9,7 @@ using namespace std;
 
 bool isInt(string);
 bool isFloat(string);
+bool isString(string);
 //bool isOperator(string); deprecated
 bool isVariable(string);
 bool isArithOperator(string);
