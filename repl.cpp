@@ -35,8 +35,8 @@ int main() {
             if (node != NULL) {
                 cout << "Root: " << node->token->getVal() << endl;
                 printTree(node);
-                Token test = interp(node, environ);
-                cout << test.getVal() << endl;
+                Token *test = interp(node, environ);
+                if (test) cout << test->getVal() << endl;
             }
         }
     }
