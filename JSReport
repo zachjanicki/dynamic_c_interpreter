@@ -1,0 +1,77 @@
+John Joyce, Zach Janicki, Pierce Cunneen
+Fundamentals of Computing II
+Final Project Report
+April 26, 2016
+
+For our project, we set out to build a simple Javascript interpreter. We embarked on this journey because we were interested in doing a unique, non-traditional project that was very technical. Completing such a project would allow us to learn more about not only C++, but as computing and its paradigms in their entirety. After many hours spent learning, researching, and writing code, we have finally reached our goal. We have successfully created a simple interpreter. Our interpreter takes the form of a command line program, using a REPL to accept, break down, and execute single lines of simple javascript. As of now, the interpreter is capable of handling mathematical expressions, logical comparisons, variable declarations and manipulation, simple if-else statements, simple while loops, and simple for loops. Although the interpreter is far from the level complexity that we hope to achieve with it, it is well on its way. 
+
+
+USER MANUAL: 
+
+	Complete the following steps to successfully launch the interpreter program
+		
+		1. Open a terminal session
+		2. Navigate to the directory containing the 'js' executable/Makefile
+		3. Make sure the program is built (Make)
+		4. Begin running the program by typing './js' 
+
+	Once the program is running (you'll see JS->), complete the following steps to execute JavaScript lines
+
+		1. Type the desired line 
+		2. Press return
+		3. Evaluate the output of the interpreter
+
+	What can I do with this interpreter? 
+
+		Arithmetic:
+
+			JS-> 5+4
+			9.000
+			JS-> 5+(7*8)
+			61.000
+			JS-> 5%2+5*5
+			26.000
+
+		Logical Comparisons:
+
+			JS-> 4>5*3
+			0.000
+			JS-> 10303 > 5+65
+			1.000
+
+		Variables: 
+
+			JS-> var a = 10; 
+			JS-> a;
+			10.000
+			JS-> var b = a*5;
+			JS->b;
+			50.000
+
+		Flow Control:
+
+			if-else (single-line body)
+
+				if (a>b) { b = a; } else { a = b; }
+
+			while (single-line body)
+
+				while ( a<10 ) { a = a + 1; }
+
+			for (single-line body)
+
+				for (a=0; a<10; a=a+1) { myOtherVar = a*a; }
+
+
+
+	How do I exit the interpreter gracefully?
+
+		1. Type exit and press return
+
+
+
+
+In the future, we hope to add support for user-defined functions and function calls, as well as multiline bodies in if-elses, whiles, and fors. 
+
+
+
