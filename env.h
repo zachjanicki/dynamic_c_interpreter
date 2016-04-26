@@ -49,7 +49,7 @@ class env {
         booleans["false"] = false;
     }
     vector <string> keywords;
-    map <string, Token> variables;
+    map <string, Token *> variables;
     map <string, Function> user_defined_functions;
     //map <string, func> operators;
     map <string, bool> booleans;

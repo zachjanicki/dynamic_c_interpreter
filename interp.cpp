@@ -66,15 +66,21 @@ Token interp(ASTNode *root, env * environment) {
     if (root -> token -> getType() == "Float") {
         return *root -> token;
     } else if (root -> token -> getType() == "Variable") {
-        if (environment -> variables.count(root -> token -> getVal())) {
-            return environment -> variables.at(root -> token -> getVal());
+        if (environment -> variables[root -> token -> getVal()]) {
+            cout << *(environment -> variables[root -> token -> getVal()]).getVal() << " " << root->token->getVal() << endl;
+            return *(environment -> variables[root -> token -> getVal()]);
         } else {
             cout << "Variable " << root -> token -> getVal() << " is not defined" << endl;
         }
 
     } else if (root -> token -> getType() == "AssignmentOperator") {
-            environment -> variables.insert(pair<string, Token>(root -> left -> token -> getVal(), interp(root -> right, environment)));
-
+        //if (!environment -> variables.count(root -> token -> getVal())) {
+        //    environment -> variables.insert(pair<string, Token>(root -> left -> token -> getVal(), interp(root -> right, environment)));
+        //} else {
+        Token token = interp(root -> right, environment);
+        Token *tokenPtr = &token;
+            environment -> variables[root -> left -> token -> getVal()] = tokenPtr;
+        //}
     } else if (root -> token -> getType() == "ArithOperator") {
         if (root -> token -> getVal() == "+") {
             return Token(to_string(stof(interp(root -> left, environment).getVal()) + stof(interp(root -> right, environment).getVal())), "Float", 0, 0, 0);
