@@ -15,7 +15,7 @@
 #define INTERP_H
 
 
-Token interp(ASTNode *, env *);
+Token* interp(ASTNode *, env *);
 Token interpArithmeticExpression(ASTNode *, env *);
 
 

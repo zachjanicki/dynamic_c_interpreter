@@ -28,3 +28,4 @@ Parser.o: Parser.cpp Parser.h Token.h
 clean:
 	rm *.o
 	rm main
+	rm js
