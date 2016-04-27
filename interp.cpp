@@ -136,6 +136,17 @@ Token* interp(ASTNode *root, env * environment) {
                 Token *uselessToken = interp(root -> right, environment);
             }
             return NULL;
+        } else if (root -> token -> getVal() == "for") {
+            Token *variable = interp(root -> left, environment);
+            while (true) {
+                if (interp(root -> leftcenter, environment) -> getVal() == "1") {
+                    Token *uselessToken = interp(root -> right, environment);
+                    Token *increment = interp(root -> rightcenter, environment);
+                } else {
+                    break;
+                }
+            }
+            return NULL;
         }
     }
 
