@@ -53,7 +53,7 @@ bool isArithOperator(string token) {
 }
 
 bool isLogicalOperator(string token) {
-    regex regularExpression("^[<>]{1}$|^==$|^<=$|^>=$|^!=$");
+    regex regularExpression("^[<>]{1}$|^==$|^<=$|^>=$|^!=$|^&&$|^\\|\\|$");
     if (regex_match(token, regularExpression)) {
         return true;
     }

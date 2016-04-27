@@ -23,7 +23,7 @@ ASTNode* parse(vector <Token *> tokens){
     stack<Token*> scopeStack;
     for (int i = 0; i < tokens.size(); i++){
         /* ------- CREATE NEW ASTNode --------- */
-        ASTNode* newNode; 
+        ASTNode* newNode;
         Token *current = tokens[i];
         //handle end of statements
         if (current->getVal() == ";" ) return nodes[0];

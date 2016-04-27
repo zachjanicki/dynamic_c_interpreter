@@ -126,7 +126,7 @@ Token* createToken(string TokenStr, int line, int start, int end) {
         currentToken = new ArithOperator(TokenStr, line, start, end);
     }
     else if (isString(TokenStr)){
-        currentToken = new String(TokenStr, line, start, end);
+        currentToken = new String(TokenStr.substr(1, TokenStr.length() - 2), line, start, end);
     }
     else if (isFloat(TokenStr)) {
         currentToken = new Float(TokenStr, line, start, end);
