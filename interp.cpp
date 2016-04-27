@@ -79,6 +79,27 @@ Token* interp(ASTNode *root, env * environment) {
                 result = &False;
             }
         }
+    } else if (root -> token -> getType() == "Keyword") {
+        if (root -> token -> getVal() == "while") {
+            while (true) {
+                if (interp(root -> left, environment) -> getVal() == "1") {
+                    Token *uselessToken = interp(root -> right, environment);
+                } else {
+                    break;
+                }
+            }
+            return NULL;
+        } else if (root -> token -> getVal() == "if") {
+            if (interp(root -> left, environment) -> getVal() == "1") {
+                Token *uselessToken = interp(root -> leftcenter, environment);
+
+            } else if (root -> right -> token -> getVal() == "else") {
+                root -> right -> token -> value = "if";
+                Token *uselessToken = interp(root -> right, environment);
+            }
+            return NULL;
+        }
     }
+
     return result;
 }

@@ -19,7 +19,9 @@ int main() {
         // REPL!!
         cout << "JS-> ";
         getline(cin, js);
-
+        if (js == "exit") {
+            return 0;
+        }
         //separate line into individual tokens
         tokens = seperateIntoTokens(js);
         int i;
