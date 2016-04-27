@@ -39,14 +39,21 @@ vector<Token*> seperateIntoTokens(string line) {
     //a=1;
     //a = 1;
     string characters = "";
+
+    //list of tokens created by this function
     vector<Token*> tokenList;
+    //return if the line is empty
     if (line.length() == 0) return tokenList;
+    //create pointer to 2 tokens
     Token *oldToken;
     Token *newToken;
     oldToken = NULL;
     int begin = 0;
+    //scan through entire line character by character
     for (int i = 0; i < line.length(); i++) {
+        //check for a space
         if (line[i] != ' ') { // dealing with characters right next to each other "aabbas;, a=1, var==var2, ect..."
+            //check for a string and handle
             if (line[i] ==  '"' or line[i] == '\''){
                 char firstChar = line[i];
                 int startingPos = i;
@@ -54,7 +61,6 @@ vector<Token*> seperateIntoTokens(string line) {
                 characters = line[currentPos];
                 currentPos++;
                 while (currentPos != line.length()){
-                    // cout << characters << endl;
                     if (line[currentPos] == firstChar){
                         characters += firstChar;
                         currentPos++;
@@ -64,46 +70,55 @@ vector<Token*> seperateIntoTokens(string line) {
                     characters += line[currentPos];
                     currentPos++;
                 }
-                // cout << "here" << endl;
-                // cout << currentPos << endl;
-                // cout << line.length() << endl;
-                // cout << line[currentPos - 1] << endl;
-                // cout << firstChar << endl;
                 if (currentPos == line.length() && line[currentPos - 1] != firstChar){
-                    cout <<  "Error, string incomplete" << endl;
-                    break;
+                    cout <<  "Error: String Incomplete" << endl;
+                    return tokenList;
                 }
                 else {
+                    //create a string token 
                     newToken = createToken(characters, 0, startingPos, currentPos - 1);
                     tokenList.push_back(newToken);
                     begin = currentPos;
                     i = currentPos - 1;
+                    //reset the two token pointers
                     newToken = NULL;
                     oldToken = NULL;
+                    //reset the token characters
                     characters = "";
                 }
 
             }
+            //if the token is NOT a string continue here
             else {
+                //get the token starting position
                 int startingPos = i - characters.length();
+                //add the current char to the characters for the current token
                 characters += line[i];
                 int endingPos = i;
+                //create a new token, point newToken pointer to it
                 newToken = createToken(characters, 0, startingPos, endingPos);
+
+                //check to see if last token is of different type than new token (unless we are on the first char)
                 if (!isSameType(newToken, oldToken) && i != begin && (!newToken || (newToken->getType() != "LogicalOperator" && newToken->getType() != "Keyword"))) { // then we need to add what we have onto the tokenList
                     begin = i;
                     i--;
+
+                    //push oldToken into the vector of token pointers
                     tokenList.push_back(oldToken);
+                    //reset the newToken and oldToken pointers as well as characters string
                     newToken = NULL;
                     oldToken = NULL;
                     characters = "";
 
                 }
                 else {
+                    //if they reach this point set the oldToken pointer to the newToken -> simply replace oldToken
                     oldToken = newToken;
                 }
             }
 
         } else { //there is a space so we add what we have to the tokenList and reset the struct
+            //if not null, add the oldToken and reset variables
             if (oldToken) tokenList.push_back(oldToken);
             newToken = NULL;
             oldToken = NULL;
@@ -111,17 +126,19 @@ vector<Token*> seperateIntoTokens(string line) {
             begin = i+1;
         }
     }
-
+    //if not null, add the oldToken and return the vector
     if (oldToken) tokenList.push_back(oldToken);
     return tokenList;
 }
 
 
 
-////need a way to pass in line, startingPos, endingPos when creating token objects.
+//creates a token based on type checking functions
 Token* createToken(string TokenStr, int line, int start, int end) {
 
+    //create token pointer
     Token *currentToken;
+    //get the token type and create the appropriate subtoken
     if (isArithOperator(TokenStr)) {
         currentToken = new ArithOperator(TokenStr, line, start, end);
     }
@@ -146,6 +163,7 @@ Token* createToken(string TokenStr, int line, int start, int end) {
         currentToken = NULL;
     }
 
+    //return the newly created token
     return currentToken;
 
 }

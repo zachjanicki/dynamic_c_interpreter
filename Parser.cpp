@@ -16,14 +16,20 @@
 #include "tokenize.h"
 using namespace std;
 
-//parses the text based on a vector of token pointers
+//parses the text based on a vector of token pointers passed in - returns the root node of the abstract syntax tree
 ASTNode* parse(vector <Token *> tokens){
+    //create a temporary structure to hold the nodes
     vector <ASTNode*> nodes;
     int prevIndex;
+    //create a stack to maintain the parenthetic scope
     stack<Token*> scopeStack;
+
+    //scan through each token in the passed in vector
     for (int i = 0; i < tokens.size(); i++){
         /* ------- CREATE NEW ASTNode --------- */
+        //create a new node
         ASTNode* newNode;
+        //snag a token pointer from the vector
         Token *current = tokens[i];
         //handle end of statements
         if (current->getVal() == ";" ) return nodes[0];
@@ -36,15 +42,18 @@ ASTNode* parse(vector <Token *> tokens){
         newNode->rightcenter = NULL;
         newNode->token = tokens[i];
 
-        //get previous node
+        //get previous node in the vector previously created, if there is one
         prevIndex = nodes.size()-1;
         ASTNode *prevNode = NULL; 
         if (nodes.size() > 0) prevNode = nodes[prevIndex];
 
 
         /* -------- PARSE --------- */
+
+        //if the new node token is anything other than a keyword or operator enter here
         if (newNode->token->getType() != "Keyword" && newNode->token->getType() != "ArithOperator" && newNode->token->getType() != "LogicalOperator" && newNode->token->getType() != "AssignmentOperator" ){
-            /* ---------- DEALS WITH SCOPE OPERATORS '(' AND '[' ------------ */
+            /* ---------- DEALS WITH SCOPE OPERATORS '(' '{' and '[' ------------ */
+            //if the token is an opening parenthesis symbol, enter here
             if (tokens[i]->getType() == "Scope Symbol" && tokens[i]->getPrecedence() == 0) {
                 //push the symbol onto a stack
                 scopeStack.push(tokens[i]);
@@ -64,7 +73,7 @@ ASTNode* parse(vector <Token *> tokens){
                         if (tokens[j]->getPrecedence() == 0)
                             scopeStack.push(tokens[j]);
                         else {
-                            //check for incorrect closing brace 
+                            //check for incorrect closing brace -- if correct closing brace found, pop the opening brace
                             if (scopeStack.top()->getVal() == "[") {
                                 if (tokens[j]->getVal() == "]") scopeStack.pop();
                                 else { error("Syntax Error: Unbalanced separators"); return NULL; }
@@ -81,8 +90,7 @@ ASTNode* parse(vector <Token *> tokens){
                     }
                     //handle if a semicolon has been reached - of particular importance in 'for' loop
                     else if (tokens[j]->getType() == "Semicolon" && prevNode->token->getVal() == "for") {
-
-                        if (prevNode->left == NULL) {
+                        if (prevNode->left == NULL) {   
                             ASTNode* forCondition = parse(subTokens);
                             prevNode->left = forCondition;
                             subTokens.clear();
@@ -101,6 +109,7 @@ ASTNode* parse(vector <Token *> tokens){
                 if (!scopeStack.empty()) { error("Syntax Error: Unbalanced separators"); return NULL; }
                 subTokens.pop_back();
 
+                //reset the incrementer value to appropriate place
                 i = j-1;
 
                 //check if we are building a for loop tree
@@ -113,23 +122,27 @@ ASTNode* parse(vector <Token *> tokens){
 
                 //if not a for loop, simply parse whatever is inside the brackets
                 newNode = parse(subTokens);
+                //set high precedence for anything inside parenthesis so that is appears at bottom of tree
                 newNode->token->precedence = 5;
 
             }
                 /* ---------- END SCOPE HANDLING ----------- */
 
+            //if there are no nodes on the tree yet, push the current token into the vector
             if (nodes.size() == 0){
                 nodes.push_back(newNode);
             }
             else{
+                //if the previous node is an operator other than subtraction sign simply assign its child
                 if (prevNode->left == NULL && prevNode->token->getVal() != "-") {
                     prevNode->left = newNode;
                 }
                 else {
-                    //check right side for placement
+                    //check right side for placement -- scan to bottom of current tree
                     while (prevNode->right != NULL)
                         prevNode = prevNode->right;
 
+                    //handle the negative sign on doubles --- it is not subtraction
                     if (prevNode->left == NULL && prevNode->token->getVal() == "-") {
                         Token *prevToken = prevNode->token;
                         Token *newToken = newNode->token;
@@ -140,10 +153,13 @@ ASTNode* parse(vector <Token *> tokens){
                         continue;
                     }
 
-                    //if we have an if statement, use the center node
+                    //if we have an if statement previously
                     if (prevNode->token->getVal() == "if") {
+                            //if there is no body, point to leftcenter 
                             if (prevNode->leftcenter == NULL) prevNode->leftcenter = newNode;
+                            //if there is a body but no else body, point to right
                             else if (prevNode->right == NULL) prevNode->right = newNode;
+                            //otherwise something went wrong with the if-else statement
                             else {
                                 error("Syntax Error: Invalid Keyword");
                                 return NULL;
@@ -151,6 +167,7 @@ ASTNode* parse(vector <Token *> tokens){
                         }
                     //if not an if statement use right child
                     else {
+                        //always point to right child if not an if-else 
                         if (prevNode->right == NULL)
                             prevNode->right = newNode;
                         else {
@@ -161,11 +178,11 @@ ASTNode* parse(vector <Token *> tokens){
                 }
             }
         }
-        //if a keyword
+        //if a keyword token
         else if (newNode->token->getType() == "Keyword"){
-            //check if variable
+            //check if variable -- if so, simply continue to the next token
             if (newNode->token->getVal() == "var") continue;
-            //check for if
+            //check for if-else statement by keyword
             if (newNode->token->getVal() == "else") {
                 if (prevNode->token->getVal() == "if") continue;
                 else {
@@ -173,28 +190,32 @@ ASTNode* parse(vector <Token *> tokens){
                     return NULL;
                 }
             }
+            //if we have a keyword and the size on the nodes stack is not 0, throw an error, otherwise push 
             if (nodes.size() == 0) nodes.push_back(newNode);
             else error("Syntax Error: Invalid Keyword");
 
         }
-        //if an operator
+        //if newnode is an operator 
         else {
-            //if begins with an operator, something is wrong
+            //if begins with an operator other than - (negative), something is wrong, throw an error
             if (nodes.size() == 0){
                 if (newNode->token->getVal() != "-") {
                     error("Syntax Error: Invalid operator");
                     return NULL;
                 }
                 else {
+                    //if a negative symbol, push back the operator
                     nodes.push_back(newNode);
                 }
             }
+            //if the vector has nodes 
             else if (prevNode->token->getType() != "ArithOperator" && prevNode->token->getType() != "LogicalOperator" && prevNode->token->getType() != "AssignmentOperator"){
                 if (newNode->token->getVal() == "=" && prevNode->token->getType() == "Float") { error("Syntax Error: Literals are unassigable"); return NULL;}
                 newNode->left = prevNode;
                 nodes[prevIndex] = newNode;
             }
             else{
+                //check the precedence of two operators if they are next to each other -- whichever has higher significance should go on the bottom
                 if (prevNode->token->getPrecedence() <= newNode->token->getPrecedence()){
                     newNode->left = prevNode->right;
                     prevNode->right = newNode;
