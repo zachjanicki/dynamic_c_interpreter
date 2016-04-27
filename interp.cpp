@@ -21,8 +21,10 @@ Token* interp(ASTNode *root, env * environment) {
             result = environment -> variables[root -> token -> getVal()];
         } else {
             cout << "Variable " << root -> token -> getVal() << " is not defined" << endl;
+            return NULL;
         }
     } else if (root -> token -> getType() == "AssignmentOperator") {
+        delete environment -> variables[root -> left -> token -> getVal()]; 
         environment -> variables[root -> left -> token -> getVal()] = interp(root -> right, environment);
         return NULL;
     } else if (root -> token -> getType() == "ArithOperator") {
@@ -43,6 +45,38 @@ Token* interp(ASTNode *root, env * environment) {
             }
             modResult = a;
             result = new Token(to_string(modResult), "Float", 0, 0, 0);
+        }
+        else if (root->token->getVal() == "+=") {
+            delete environment -> variables[root -> left -> token -> getVal()];
+            environment -> variables[root -> left -> token -> getVal()] = new Token(to_string(stof(interp(root -> left, environment)->getVal()) + stof(interp(root -> right, environment)->getVal())), "Float", 0, 0, 0); 
+            return NULL;
+        }
+        else if (root->token->getVal() == "-=") {
+            delete environment -> variables[root -> left -> token -> getVal()];
+            environment -> variables[root -> left -> token -> getVal()] = new Token(to_string(stof(interp(root -> left, environment)->getVal()) - stof(interp(root -> right, environment)->getVal())), "Float", 0, 0, 0);
+            return NULL; 
+        }
+        else if (root->token->getVal() == "*=") {
+            delete environment -> variables[root -> left -> token -> getVal()];
+            environment -> variables[root -> left -> token -> getVal()] = new Token(to_string(stof(interp(root -> left, environment)->getVal()) * stof(interp(root -> right, environment)->getVal())), "Float", 0, 0, 0);
+            return NULL; 
+        }
+        else if (root->token->getVal() == "/=") {
+            delete environment -> variables[root -> left -> token -> getVal()];
+            environment -> variables[root -> left -> token -> getVal()] = new Token(to_string(stof(interp(root -> left, environment)->getVal()) / stof(interp(root -> right, environment)->getVal())), "Float", 0, 0, 0);
+            return NULL;
+        }
+        else if (root->token->getVal() == "--") {
+            delete environment -> variables[root -> left -> token -> getVal()];
+            float newVal = stof(interp(root -> left, environment)->getVal()) - 1.0; 
+            environment -> variables[root -> left -> token -> getVal()] = new Token(to_string(newVal), "Float", 0, 0, 0);
+            return NULL;
+        }
+        else if (root->token->getVal() == "++") {
+            delete environment -> variables[root -> left -> token -> getVal()];
+            float newVal = stof(interp(root -> left, environment)->getVal()) + 1.0; 
+            environment -> variables[root -> left -> token -> getVal()] = new Token(to_string(newVal), "Float", 0, 0, 0);
+            return NULL; 
         }
     } else if (root -> token -> getType() == "LogicalOperator") {
         int logic;
