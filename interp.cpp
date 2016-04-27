@@ -12,7 +12,6 @@ Token* interp(ASTNode *root, env * environment) {
         result = root -> token;
     } else if (root -> token -> getType() == "String"){
         result = root -> token;
-
     } else if (root -> token -> getType() == "Variable") {
         if (environment -> variables[root -> token -> getVal()]) {
             result = environment -> variables[root -> token -> getVal()];
