@@ -23,6 +23,7 @@ Token* interp(ASTNode *root, env * environment) {
             result = environment -> variables[root -> token -> getVal()];
         } else {
             cout << "Variable " << root -> token -> getVal() << " is not defined" << endl;
+            return NULL;
         }
     } else if (root -> token -> getType() == "AssignmentOperator") {
         environment -> variables[root -> left -> token -> getVal()] = interp(root -> right, environment);
