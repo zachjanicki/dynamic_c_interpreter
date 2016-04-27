@@ -3,7 +3,7 @@ Fundamentals of Computing II
 Final Project Report
 April 26, 2016
 
-For our project, we set out to build a simple Javascript interpreter. We embarked on this journey because we were interested in doing a unique, non-traditional project that was very technical. Completing such a project would allow us to learn more about not only C++, but as computing and its paradigms in their entirety. After many hours spent learning, researching, and writing code, we have finally reached our goal. We have successfully created a simple interpreter. Our interpreter takes the form of a command line program, using a REPL to accept, break down, and execute single lines of simple javascript. As of now, the interpreter is capable of handling mathematical expressions, logical comparisons, variable declarations and manipulation, simple if-else statements, simple while loops, and simple for loops. Although the interpreter is far from the level complexity that we hope to achieve with it, it is well on its way. 
+For our project, we set out to build a simple Javascript interpreter. We embarked on this journey because we were interested in doing a unique, non-traditional project that was very technical. Completing such a project would allow us to learn more about not only C++, but about computing and its paradigms in their entirety. After many hours spent learning, researching, and writing code, we have finally reached our goal. We have successfully created a simple interpreter. Our interpreter takes the form of a command line program, using a REPL to accept, break down, and execute single lines of simple javascript. As of now, the interpreter is capable of handling mathematical expressions, logical comparisons, variable declarations and manipulation, simple if-else statements, simple while loops, and simple for loops. Although the interpreter is far from the level complexity that we hope to achieve with it, it is well on its way. 
 
 
 USER MANUAL: 
@@ -31,6 +31,10 @@ USER MANUAL:
 			61.000
 			JS-> 5%2+5*5
 			26.000
+			JS-> 5++;
+			6
+			JS-> 5--;
+			4
 
 		Logical Comparisons:
 
@@ -47,6 +51,9 @@ USER MANUAL:
 			JS-> var b = a*5;
 			JS->b;
 			50.000
+			JS-> var string = "Hello, World"
+			JS-> string
+			"Hello, World"
 
 		Flow Control:
 
@@ -69,6 +76,9 @@ USER MANUAL:
 		1. Type exit and press return
 
 
+	Can I use the && and || operators?
+		
+		Yes.
 
 
 In the future, we hope to add support for user-defined functions and function calls, as well as multiline bodies in if-elses, whiles, and fors. 
