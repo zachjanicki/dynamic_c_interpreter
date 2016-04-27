@@ -1,73 +1,18 @@
 
 #include "interp.h"
+#include <typeinfo>
 
 
 using namespace std;
 
-/*
-Token interp(ASTNode *root, env * environment){
-    if (root -> token -> getType() == "AssignmentOperator") {
-        // creation of a new variable or updating of a variable that exists
-        if (environment.count(root -> left -> getValue())) {
-            // set the existing variable equal to result of the parse tree
-        } else {
-            // create new variable and interpret tree
-            return interpArithmeticExpression(root -> right, environment);
-        }
-    } else if (root -> token -> getType() == "LogicalOperator") {
-
-        if (root -> token -> getVal() == "==") {
-            return (interpArithmeticExpression(root -> left, environment) == interpArithmeticExpression(root -> right, environment));
-        } else if (root -> token -> getVal() == "<=") {
-            return (interpArithmeticExpression(root -> left, environment) <= interpArithmeticExpression(root -> right, environment));
-        } else if (root -> token -> getVal() == ">=") {
-            return (interpArithmeticExpression(root -> left, environment) >= interpArithmeticExpression(root -> right, environment));
-        } else if (root -> token -> getVal() == "<") {
-            return (interpArithmeticExpression(root -> left, environment) < interpArithmeticExpression(root -> right, environment));
-        } else if (root -> token -> getVal() == ">") {
-            return (interpArithmeticExpression(root -> left, environment) > interpArithmeticExpression(root -> right, environment));
-        }
-
-    }
-}
-
-
-Token interpArithmeticExpression(ASTNode *root, env * environment) {
-    if ((root -> left -> token -> getType() == "Float" || root -> left -> token -> getType() == "Variable") &&
-    (root -> right -> token -> getType() == "Float" || root -> right -> token -> getType() == "Variable")) {
-        // this is our base case so at this point we evalute accoring to wahtever operator is the root and return it
-        if (root -> token -> getVal() == "+") {
-            // return a token with the value = to the answer of the arithmetic expression
-            //cout << stof(root -> left -> token -> getVal());
-            return Token(to_string(stof(root -> left -> token -> getVal()) + stof(root -> right -> token -> getVal())), "Float", 0, 0, 0);
-        } else if (root -> token -> getVal() == "-") {
-            return Token(to_string(stof(root -> left -> token -> getVal()) - stof(root -> right -> token -> getVal())), "Float", 0, 0, 0);
-        } else if (root -> token -> getVal() == "*") {
-            return Token(to_string(stof(root -> left -> token -> getVal()) * stof(root -> right -> token -> getVal())), "Float", 0, 0, 0);
-        } else if (root -> token -> getVal() == "/") {
-            return Token(to_string(stof(root -> left -> token -> getVal()) / stof(root -> right -> token -> getVal())), "Float", 0, 0, 0);
-        }
-    } else {
-        // to the right we have an operator so we need to go down the tree
-        if (root -> token -> getVal() == "+") {
-            cout << "Here" << root -> right -> token -> getVal() << endl;
-            return Token(to_string(stof(root -> left -> token -> getVal()) + stof(interpArithmeticExpression(root -> right, environment).getVal())), "Float", 0, 0, 0);
-        } else if (root -> token -> getVal() == "-") {
-            return Token(to_string(stof(root -> left -> token -> getVal()) - stof(interpArithmeticExpression(root -> right, environment).getVal())), "Float", 0, 0, 0);
-        } else if (root -> token -> getVal() == "*") {
-            return Token(to_string(stof(root -> left -> token -> getVal()) * stof(interpArithmeticExpression(root -> right, environment).getVal())), "Float", 0, 0, 0);
-        } else if (root -> token -> getVal() == "/") {
-            return Token(to_string(stof(root -> left -> token -> getVal()) / stof(interpArithmeticExpression(root -> right, environment).getVal())), "Float", 0, 0, 0);
-        }
-    }
-}
-*/
 Token* interp(ASTNode *root, env * environment) {
 
     Token *result;
     Token *left;
     Token *right;
-
+    if (!root) {
+        return NULL;
+    }
     if (root -> token -> getType() == "Float") {
         result = root -> token;
     } else if (root -> token -> getType() == "String"){
@@ -98,12 +43,28 @@ Token* interp(ASTNode *root, env * environment) {
             result = new Token(to_string(stof(interp(root -> left, environment)->getVal()) * stof(interp(root -> right, environment)->getVal())), "Float", 0, 0, 0);
         } else if (root -> token -> getVal() == "/") {
             result = new Token(to_string(stof(interp(root -> left, environment)->getVal()) / stof(interp(root -> right, environment)->getVal())), "Float", 0, 0, 0);
+        } else if (root -> token -> getVal() == "%") {
+            double a = stof(interp(root -> left, environment) -> getVal());
+            double b = stof(interp(root -> right, environment) -> getVal());
+            double modResult;
+            while (a > b) {
+                a = a - b;
+            }
+            modResult = a;
+            result = new Token(to_string(modResult), "Float", 0, 0, 0);
         }
     } else if (root -> token -> getType() == "LogicalOperator") {
         int logic;
         Token True("1", "Float", 0,0,0), False("0", "Float", 0,0,0);
+        Token *left, *right;
+        left = interp(root -> left, environment);
+        right = interp(root -> right, environment);
         if (root -> token -> getVal() == "<") {
-            logic = interp(root -> left, environment)->getVal() < interp(root -> right, environment)->getVal();
+            if (left -> getType() == "Float" && right -> getType() == "Float") {
+                logic = stof(left -> getVal()) < stof(right -> getVal());
+            } else {
+                logic = left -> getVal() < right -> getVal();
+            }
             if (logic) {
                 result = &True;
             }
@@ -111,35 +72,55 @@ Token* interp(ASTNode *root, env * environment) {
                 result = &False;
             }
         } else if (root -> token -> getVal() == ">") {
-            logic = interp(root -> left, environment)->getVal() > interp(root -> right, environment)->getVal();
+            if (left -> getType() == "Float" && right -> getType() == "Float") {
+                logic = stof(left -> getVal()) > stof(right -> getVal());
+            } else {
+                logic = left -> getVal() > right -> getVal();
+            }
             if (logic) {
                 result = &True;
             } else {
                 result = &False;
             }
         } else if (root -> token -> getVal() == "!=") {
-            logic = interp(root -> left, environment)->getVal() != interp(root -> right, environment)->getVal();
+            if (left -> getType() == "Float" && right -> getType() == "Float") {
+                logic = stof(left -> getVal()) != stof(right -> getVal());
+            } else {
+                logic = left -> getVal() != right -> getVal();
+            }
             if (logic) {
                 result = &True;
             } else {
                 result = &False;
             }
         } else if (root -> token -> getVal() == "==") {
-            logic = interp(root -> left, environment)->getVal() == interp(root -> right, environment)->getVal();
+            if (left -> getType() == "Float" && right -> getType() == "Float") {
+                logic = stof(left -> getVal()) == stof(right -> getVal());
+            } else {
+                logic = left -> getVal() == right -> getVal();
+            }
             if (logic) {
                 result = &True;
             } else {
                 result = &False;
             }
         } else if (root -> token -> getVal() == "<=") {
-            logic = interp(root -> left, environment)->getVal() <= interp(root -> right, environment)->getVal();
+            if (left -> getType() == "Float" && right -> getType() == "Float") {
+                logic = stof(left -> getVal()) <= stof(right -> getVal());
+            } else {
+                logic = left -> getVal() <= right -> getVal();
+            }
             if (logic) {
                 result = &True;
             } else {
                 result = &False;
             }
         } else if (root -> token -> getVal() == ">=") {
-            logic = interp(root -> left, environment)->getVal() >= interp(root -> right, environment)->getVal();
+            if (left -> getType() == "Float" && right -> getType() == "Float") {
+                logic = stof(left -> getVal()) >= stof(right -> getVal());
+            } else {
+                logic = left -> getVal() >= right -> getVal();
+            }
             if (logic) {
                 result = &True;
             } else {
@@ -164,7 +145,37 @@ Token* interp(ASTNode *root, env * environment) {
                 result = &False;
             }
         }
-
+    } else if (root -> token -> getType() == "Keyword") {
+        if (root -> token -> getVal() == "while") {
+            while (true) {
+                if (interp(root -> left, environment) -> getVal() == "1") {
+                    Token *uselessToken = interp(root -> right, environment);
+                } else {
+                    break;
+                }
+            }
+            return NULL;
+        } else if (root -> token -> getVal() == "if") {
+            cout << endl;
+            if (interp(root -> left, environment) -> getVal() == "1") {
+                Token *uselessToken = interp(root -> leftcenter, environment);
+            } else if (root -> right) {
+                Token *uselessToken = interp(root -> right, environment);
+            }
+            return NULL;
+        } else if (root -> token -> getVal() == "for") {
+            Token *variable = interp(root -> left, environment);
+            while (true) {
+                if (interp(root -> leftcenter, environment) -> getVal() == "1") {
+                    Token *uselessToken = interp(root -> right, environment);
+                    Token *increment = interp(root -> rightcenter, environment);
+                } else {
+                    break;
+                }
+            }
+            return NULL;
+        }
     }
+
     return result;
 }

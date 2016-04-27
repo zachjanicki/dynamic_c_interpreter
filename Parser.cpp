@@ -25,9 +25,11 @@ ASTNode* parse(vector <Token *> tokens){
         /* ------- CREATE NEW ASTNode --------- */
         ASTNode* newNode;
         Token *current = tokens[i];
-        //end of statements
+        //handle end of statements
         if (current->getVal() == ";" ) return nodes[0];
         else newNode = new ASTNode;
+
+        //initialize the new AST node
         newNode->left = NULL;
         newNode->right = NULL;
         newNode->leftcenter = NULL;
@@ -36,7 +38,7 @@ ASTNode* parse(vector <Token *> tokens){
 
         //get previous node
         prevIndex = nodes.size()-1;
-        ASTNode *prevNode;
+        ASTNode *prevNode = NULL; 
         if (nodes.size() > 0) prevNode = nodes[prevIndex];
 
 
@@ -44,19 +46,25 @@ ASTNode* parse(vector <Token *> tokens){
         if (newNode->token->getType() != "Keyword" && newNode->token->getType() != "ArithOperator" && newNode->token->getType() != "LogicalOperator" && newNode->token->getType() != "AssignmentOperator" ){
             /* ---------- DEALS WITH SCOPE OPERATORS '(' AND '[' ------------ */
             if (tokens[i]->getType() == "Scope Symbol" && tokens[i]->getPrecedence() == 0) {
+                //push the symbol onto a stack
                 scopeStack.push(tokens[i]);
+                //create vector of tokens within the new scope
                 vector<Token*>subTokens;
                 int j = i+1;
+
+                //scan through until closing brace is found
                 while (!scopeStack.empty() && j < tokens.size()) {
 
                     //check that there are more tokens
                     if (tokens[j]) subTokens.push_back(tokens[j]);
                     else { error("Syntax Error: Misplaced Separator"); return NULL; }
 
+                    //check if closing brace has been found
                     if (tokens[j]->getType() == "Scope Symbol") {
                         if (tokens[j]->getPrecedence() == 0)
                             scopeStack.push(tokens[j]);
                         else {
+                            //check for incorrect closing brace 
                             if (scopeStack.top()->getVal() == "[") {
                                 if (tokens[j]->getVal() == "]") scopeStack.pop();
                                 else { error("Syntax Error: Unbalanced separators"); return NULL; }
@@ -71,6 +79,7 @@ ASTNode* parse(vector <Token *> tokens){
                             }
                         }
                     }
+                    //handle if a semicolon has been reached - of particular importance in 'for' loop
                     else if (tokens[j]->getType() == "Semicolon" && prevNode->token->getVal() == "for") {
 
                         if (prevNode->left == NULL) {
@@ -84,26 +93,25 @@ ASTNode* parse(vector <Token *> tokens){
                             subTokens.clear();
                         }
 
-
                     }
                     j++;
-
                 }
 
-
-
-
+                //if there are still braces on the stack, something is wrong
                 if (!scopeStack.empty()) { error("Syntax Error: Unbalanced separators"); return NULL; }
                 subTokens.pop_back();
 
                 i = j-1;
 
-                if (prevNode->token->getVal() == "for" && prevNode->rightcenter == NULL) {
+                //check if we are building a for loop tree
+                if (prevNode != NULL && prevNode->token->getVal() == "for" && prevNode->rightcenter == NULL) {
+                    //parse the for loop condition
                     ASTNode* forCondition = parse(subTokens);
                     prevNode->rightcenter = forCondition;
                     continue;
                 }
 
+                //if not a for loop, simply parse whatever is inside the brackets
                 newNode = parse(subTokens);
                 newNode->token->precedence = 5;
 
@@ -137,7 +145,7 @@ ASTNode* parse(vector <Token *> tokens){
                             if (prevNode->leftcenter == NULL) prevNode->leftcenter = newNode;
                             else if (prevNode->right == NULL) prevNode->right = newNode;
                             else {
-                                error("Syntax Error: Exiting parser.");
+                                error("Syntax Error: Invalid Keyword");
                                 return NULL;
                             }
                         }
@@ -146,7 +154,7 @@ ASTNode* parse(vector <Token *> tokens){
                         if (prevNode->right == NULL)
                             prevNode->right = newNode;
                         else {
-                            error("Syntax Error: Exiting parser.");
+                            error("Syntax Error: Invalid Keyword");
                             return NULL;
                         }
                     }
