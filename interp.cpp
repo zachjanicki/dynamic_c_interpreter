@@ -65,6 +65,8 @@ Token interpArithmeticExpression(ASTNode *root, env * environment) {
 Token* interp(ASTNode *root, env * environment) {
 
     Token *result;
+    Token *left;
+    Token *right;
 
     if (root -> token -> getType() == "Float") {
         result = root -> token;
@@ -81,8 +83,15 @@ Token* interp(ASTNode *root, env * environment) {
         environment -> variables[root -> left -> token -> getVal()] = interp(root -> right, environment);
         return NULL;
     } else if (root -> token -> getType() == "ArithOperator") {
+        left = interp(root -> left, environment);
+        right = interp(root -> right, environment);
         if (root -> token -> getVal() == "+") {
-            result = new Token(to_string(stof(interp(root -> left, environment)->getVal()) + stof(interp(root -> right, environment)->getVal())), "Float", 0, 0, 0);
+            if (left -> getType() == "String"){
+                result = new Token(interp(root -> left, environment)->getVal() + interp(root -> right, environment)->getVal(), "String", 0, 0, 0);
+            }
+            else {
+                result = new Token(to_string(stof(interp(root -> left, environment)->getVal()) + stof(interp(root -> right, environment)->getVal())), "Float", 0, 0, 0);
+            }
         } else if (root -> token -> getVal() == "-") {
             result = new Token(to_string(stof(interp(root -> left, environment)->getVal()) - stof(interp(root -> right, environment)->getVal())), "Float", 0, 0, 0);
         } else if (root -> token -> getVal() == "*") {
@@ -136,7 +145,26 @@ Token* interp(ASTNode *root, env * environment) {
             } else {
                 result = &False;
             }
+
+        } else if (root -> token -> getVal() == "&&") {
+            int left_int = stoi(interp(root -> left, environment)->getVal());
+            int right_int = stoi(interp(root -> right, environment)->getVal());
+
+            if (left_int && right_int) {
+                result = &True;
+            } else {
+                result = &False;
+            }
+        } else if (root -> token -> getVal() == "||") {
+            int left_int = stoi(interp(root -> left, environment)->getVal());
+            int right_int = stoi(interp(root -> right, environment)->getVal());
+            if (left_int || right_int) {
+                result = &True;
+            } else {
+                result = &False;
+            }
         }
+
     }
     return result;
 }

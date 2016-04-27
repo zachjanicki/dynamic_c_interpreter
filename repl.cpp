@@ -24,7 +24,7 @@ int main() {
         tokens = seperateIntoTokens(js);
         int i;
         for (i = 0; i < tokens.size(); i++) {
-          //cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
+        //   cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
         }
         if (tokens.size() > 0) {
 
