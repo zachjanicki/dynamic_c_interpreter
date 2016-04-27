@@ -94,8 +94,7 @@ Token* interp(ASTNode *root, env * environment) {
             if (interp(root -> left, environment) -> getVal() == "1") {
                 Token *uselessToken = interp(root -> leftcenter, environment);
 
-            } else if (root -> right -> token -> getVal() == "else") {
-                root -> right -> token -> value = "if";
+            } else {
                 Token *uselessToken = interp(root -> right, environment);
             }
             return NULL;
