@@ -25,16 +25,10 @@ int main() {
         //separate line into individual tokens
         tokens = seperateIntoTokens(js);
         int i;
-        for (i = 0; i < tokens.size(); i++) {
-        //   cout << tokens[i]->getVal() << " " << tokens[i]->getType() << endl;
-        }
         if (tokens.size() > 0) {
-
             ASTNode *node;
             node = parse(tokens);
             if (node != NULL) {
-                //cout << "Root: " << node->token->getVal() << endl;
-                //printTree(node);
                 Token *test = interp(node, environ);
                 if (test) cout << test->getVal() << endl;
             }
