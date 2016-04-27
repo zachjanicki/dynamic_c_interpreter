@@ -33,8 +33,8 @@ int main() {
             ASTNode *node;
             node = parse(tokens);
             if (node != NULL) {
-                // cout << "Root: " << node->token->getVal() << endl;
-                // printTree(node);
+                //cout << "Root: " << node->token->getVal() << endl;
+                //printTree(node);
                 Token *test = interp(node, environ);
                 if (test) cout << test->getVal() << endl;
             }
