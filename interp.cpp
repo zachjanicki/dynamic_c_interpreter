@@ -90,6 +90,7 @@ Token* interp(ASTNode *root, env * environment) {
             }
             return NULL;
         } else if (root -> token -> getVal() == "if") {
+            cout << root -> right -> token -> getVal() << endl;
             if (interp(root -> left, environment) -> getVal() == "1") {
                 Token *uselessToken = interp(root -> leftcenter, environment);
 
