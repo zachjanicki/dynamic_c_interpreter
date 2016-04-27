@@ -13,7 +13,22 @@ bool isInt(string token) {
     return false;
 }
 
+bool isString(string token){
+    string regex_string;
+    if (token.length() == 1){
+        regex_string = "[\"']";
+    }
+    else {
+        regex_string = "^([\"'])[^\"']*\\1$";
+    }
+    regex regularExpression(regex_string);
+    if (regex_match(token, regularExpression)) {
+        return true;
+    }
+    return false;
+}
 bool isFloat(string token) {
+
     regex regularExpression("^[-]?[0-9]*\\.?[0-9]*|\\.");//[0-9]+\\.[0-9]*$");
     if (regex_match(token, regularExpression)) {
         return true;
@@ -64,9 +79,9 @@ bool isVariable(string token) {
 bool isScopeSym(string token) {
     regex regularExpression("^[\\[\\](){}]$");
     if (regex_match(token, regularExpression)) {
-        return true; 
+        return true;
     }
-    else return false; 
+    else return false;
 }
 
 bool isSemiColon(string token) {
@@ -81,7 +96,7 @@ bool isKeyword(string token) {
     // if token is in the keyword dictionary...
     env *environ = new env();
     if (std::find(environ->keywords.begin(), environ->keywords.end(), token) != environ->keywords.end())
-    return true; 
+    return true;
 }
 
 bool isSameType(Token *token1, Token *token2) {

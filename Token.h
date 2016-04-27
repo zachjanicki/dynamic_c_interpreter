@@ -64,13 +64,21 @@ public:
     }
 
 
- 
+
     string value;
     string type;
-    int line, startingPos, endingPos, precedence; 
-protected: 
-    
+    int line, startingPos, endingPos, precedence;
+protected:
 
+
+
+};
+
+class String: public Token {
+public:
+    String(string val, int line, int startingPos, int endingPos): Token(val, "String" ,line, startingPos, endingPos) {
+
+    }
 
 };
 
@@ -121,17 +129,17 @@ public:
 class Symbol : public Token {
 public:
     Symbol(string val, string type, int line, int startingPos, int endingPos): Token(val, type, line, startingPos, endingPos) {
-     if (val == "[" || val == "(" || val == "{") 
-            precedence = 0; 
-        else 
-            precedence= 1; 
+     if (val == "[" || val == "(" || val == "{")
+            precedence = 0;
+        else
+            precedence= 1;
     }
 
 
 
 private:
 
-    
+
 
 };
 class ScopeSym : public Symbol {
@@ -140,7 +148,7 @@ public:
     };
 
 private:
-    
+
 
 };
 
@@ -148,8 +156,8 @@ private:
 class Operator : public Token {
 public:
     Operator(string val, string type, int line, int startingPos, int endingPos): Token(val,type, line, startingPos, endingPos) {
-        if (val == "=" || val == "*=" || val == "+=" || val == "-=" || val == "/=") { 
-            precedence = 1; 
+        if (val == "=" || val == "*=" || val == "+=" || val == "-=" || val == "/=") {
+            precedence = 1;
         }
         else if (val == "+" || val == "-"){
             precedence = 3;
@@ -158,7 +166,7 @@ public:
             precedence = 4;
         }
         else if (val == ">=" || val == "<=" || val == "<" || val == ">" || val == "==" || val == "!=") {
-            precedence = 2; 
+            precedence = 2;
         }
 
     }

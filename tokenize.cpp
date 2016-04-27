@@ -4,11 +4,14 @@
 #include <vector>
 #include "typeChecking.h"
 #include "Token.h"
+#include <stdlib.h>
 
 //checks the type of a token
 string checkType(string token) {
     if (isInt(token)) {
         return "Int";
+    } else if  (isString(token)){
+        return "String";
     } else if (isFloat(token)) {
         return "Float";
     } else if (isArithOperator(token)) {
@@ -44,22 +47,60 @@ vector<Token*> seperateIntoTokens(string line) {
     int begin = 0;
     for (int i = 0; i < line.length(); i++) {
         if (line[i] != ' ') { // dealing with characters right next to each other "aabbas;, a=1, var==var2, ect..."
-            int startingPos = i - characters.length();
-            characters += line[i];
-            int endingPos = i;
-            newToken = createToken(characters, 0, startingPos, endingPos);
-            if (!isSameType(newToken, oldToken) && i != begin && (!newToken || (newToken->getType() != "LogicalOperator" && newToken->getType() != "Keyword"))) { // then we need to add what we have onto the tokenList
-                begin = i;
-                i--;
-                tokenList.push_back(oldToken);
-                newToken = NULL;
-                oldToken = NULL;
-                characters = "";
+            if (line[i] ==  '"' or line[i] == '\''){
+                char firstChar = line[i];
+                int startingPos = i;
+                int currentPos = i;
+                characters = line[currentPos];
+                currentPos++;
+                while (currentPos != line.length()){
+                    // cout << characters << endl;
+                    if (line[currentPos] == firstChar){
+                        characters += firstChar;
+                        currentPos++;
+                        break;
+
+                    }
+                    characters += line[currentPos];
+                    currentPos++;
+                }
+                // cout << "here" << endl;
+                // cout << currentPos << endl;
+                // cout << line.length() << endl;
+                // cout << line[currentPos - 1] << endl;
+                // cout << firstChar << endl;
+                if (currentPos == line.length() && line[currentPos - 1] != firstChar){
+                    cout <<  "Error, string incomplete" << endl;
+                    break;
+                }
+                else {
+                    newToken = createToken(characters, 0, startingPos, currentPos - 1);
+                    tokenList.push_back(newToken);
+                    begin = currentPos;
+                    i = currentPos - 1;
+                    newToken = NULL;
+                    oldToken = NULL;
+                    characters = "";
+                }
 
             }
             else {
-                oldToken = newToken;
+                int startingPos = i - characters.length();
+                characters += line[i];
+                int endingPos = i;
+                newToken = createToken(characters, 0, startingPos, endingPos);
+                if (!isSameType(newToken, oldToken) && i != begin && (!newToken || (newToken->getType() != "LogicalOperator" && newToken->getType() != "Keyword"))) { // then we need to add what we have onto the tokenList
+                    begin = i;
+                    i--;
+                    tokenList.push_back(oldToken);
+                    newToken = NULL;
+                    oldToken = NULL;
+                    characters = "";
 
+                }
+                else {
+                    oldToken = newToken;
+                }
             }
 
         } else { //there is a space so we add what we have to the tokenList and reset the struct
@@ -83,7 +124,11 @@ Token* createToken(string TokenStr, int line, int start, int end) {
     Token *currentToken;
     if (isArithOperator(TokenStr)) {
         currentToken = new ArithOperator(TokenStr, line, start, end);
-    } else if (isFloat(TokenStr)) {
+    }
+    else if (isString(TokenStr)){
+        currentToken = new String(TokenStr, line, start, end);
+    }
+    else if (isFloat(TokenStr)) {
         currentToken = new Float(TokenStr, line, start, end);
     } else if (isLogicalOperator(TokenStr)) {
         currentToken = new LogicalOperator(TokenStr, line, start, end);
@@ -104,5 +149,3 @@ Token* createToken(string TokenStr, int line, int start, int end) {
     return currentToken;
 
 }
-
-
