@@ -3,25 +3,25 @@ Fundamentals of Computing II
 Final Project Report
 April 26, 2016
 
-For our project, we set out to build a simple Javascript interpreter. We embarked on this journey because we were interested in doing a unique, non-traditional project that was very technical. Completing such a project would allow us to learn more about not only C++, but about computing and its paradigms in their entirety. After many hours spent learning, researching, and writing code, we have finally reached our goal. We have successfully created a simple interpreter. Our interpreter takes the form of a command line program, using a REPL to accept, break down, and execute single lines of simple javascript. As of now, the interpreter is capable of handling mathematical expressions, logical comparisons, variable declarations and manipulation, simple if-else statements, simple while loops, and simple for loops. Although the interpreter is far from the level complexity that we hope to achieve with it, it is well on its way. 
+For our project, we set out to build a simple Javascript interpreter. We embarked on this journey because we were interested in doing a unique, non-traditional project that was very technical. Completing such a project would allow us to learn more about not only C++, but about computing and its paradigms in their entirety. After many hours spent learning, researching, and writing code, we have finally reached our goal. We have successfully created a simple interpreter. Our interpreter takes the form of a command line program, using a REPL to accept, break down, and execute single lines of simple javascript. As of now, the interpreter is capable of handling mathematical expressions, logical comparisons, variable declarations and manipulation, simple if-else statements, simple while loops, and simple for loops. Although the interpreter is far from the level complexity that we hope to achieve with it, it is well on its way.
 
 
-USER MANUAL: 
+USER MANUAL:
 
 	Complete the following steps to successfully launch the interpreter program
-		
+
 		1. Open a terminal session
 		2. Navigate to the directory containing the 'js' executable/Makefile
 		3. Make sure the program is built (Make)
-		4. Begin running the program by typing './js' 
+		4. Begin running the program by typing './js'
 
 	Once the program is running (you'll see JS->), complete the following steps to execute JavaScript lines
 
-		1. Type the desired line 
+		1. Type the desired line
 		2. Press return
 		3. Evaluate the output of the interpreter
 
-	What can I do with this interpreter? 
+	What can I do with this interpreter?
 
 		Arithmetic:
 
@@ -43,9 +43,9 @@ USER MANUAL:
 			JS-> 10303 > 5+65
 			1.000
 
-		Variables: 
+		Variables:
 
-			JS-> var a = 10; 
+			JS-> var a = 10;
 			JS-> a;
 			10.000
 			JS-> var b = a*5;
@@ -77,11 +77,46 @@ USER MANUAL:
 
 
 	Can I use the && and || operators?
-		
+
 		Yes.
 
 
-In the future, we hope to add support for user-defined functions and function calls, as well as multiline bodies in if-elses, whiles, and fors. 
+In the future, we hope to add support for user-defined functions and function calls, as well as multiline bodies in if-elses, whiles, and fors.
 
+Our project includes the beginnings of some unit tests although we have not come close to fully
+implementing the testing suite. There are other parts of the project that we plan
+to continue to develop after the semester has finished. We have certainly enjoyed working on this project.
 
+Some Known Bugs:
 
+Part of what has not been entirely implemented yet is error checking when there are syntax issues. If there are
+errors, the interpreter is likely to segfault instead of catching the errors. These
+problems pop up in all sorts of different situations but we have tried to catch many of them
+right away. For loops work in some cases. While loops are good to go, and so are if statements
+along with if else statements.
+
+Our bugs will be easier to fix when we have our whole testing suite finished
+which is something we would like to do as we continue to work on this project in the future
+to have a cool idea on our resume and a project that we enjoy working on.
+
+TIME LOG:
+
+Pierce Cunneen: 40 hours - Worked on Tests, Type checking regex, env, ASTNode, Parsing, and REPL
+Zach Janicki: 40 hours - Worked on Tokenizing, Interpretation, and REPL
+John Joyce: 40 hours - worked on Parsing, Environment, and REPL
+
+Our times are as close as we could get to roughly 40 hours give or take a few on either side.
+
+MEETING LOG:
+March 18th: First met and decided on our project
+April 1st: Met and agreed on what we needed to learn to get our project under way
+April 3rd: Started to commit code and worked on tokenizing together
+April 5th: Successfully compiled for the first time!
+April 18th: Worked heavily on math interpretation
+April 25th: Met to discuss final parts of project and finish control flow functions
+
+We spent a lot of our time working together during our meetings because of the complicated scope of
+our project. It couldn't have been done by one of us individually and we did quite a bit
+of pair programming to make sure that we all understood the code and were able to contribute to all parts.
+The time log shows what parts of the projects we each worked on. These were appropriately
+divvied up among us at each team meeting.
