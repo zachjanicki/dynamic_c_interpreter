@@ -1,5 +1,5 @@
-# javascript_interpreter
-A JavaScript interpreter for a final project in Fundamentals of Computing 2
+# Dynamic C interpreter
+A Dynamically typed C style language  interpreter
 
 Some current language restrictions:
     - All lines end with a semi colon;
